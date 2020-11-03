@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -18,21 +19,6 @@ namespace FrogSerialization
     #endregion 委托
 
     #region 枚举
-
-    /// <summary>
-    /// 序列化模式
-    /// </summary>
-    public enum EnumFrogSerializationType
-    {
-        /// <summary>
-        /// 不可序列化的基本类型，每个具体类型都必须写好对应的序列化方法
-        /// </summary>
-        NonSerialized,
-        /// <summary>
-        /// 可序列化类型，对象将拆分序列化其字段
-        /// </summary>
-        Serializable,
-    }
 
     #endregion 枚举
 
@@ -57,6 +43,7 @@ namespace FrogSerialization
 
         public const string Const_XmlNameEle_NonSerializedField = "NonSerializedField";
         public const string Const_XmlNameEle_SerializableField = "SerializableField";
+        public const string Const_XmlNameEle_NonSerializeObject = "NonSerializeObject";
         public const string Const_XmlNameEle_Object = "Object";
         public const string Const_XmlNameEle_Type = "Type";
         public const string Const_XmlNameEle_TypeInfo = "TypeInfo";
@@ -78,12 +65,12 @@ namespace FrogSerialization
         /// <summary>
         /// 无元素类型数组
         /// </summary>
-        public static readonly Type[] Const_NoElementTypeArray = new Type[] { };
+        public static readonly Type[] Const_NoElementTypeArray = Array.Empty<Type>();
 
         /// <summary>
         /// 无元素object数组
         /// </summary>
-        public static readonly object[] Const_NoElementObjectArray = new object[] { };
+        public static readonly object[] Const_NoElementObjectArray = Array.Empty<object>();
 
         #endregion 公共默认参数
 
@@ -132,7 +119,7 @@ namespace FrogSerialization
             /// </summary>
             public Stack<string> StackCurrentPath { get; } = new Stack<string>();
 
-            public Dictionary<Type, IDictionary<string, (FieldInfo Field, EnumFrogSerializationType Type, string Comment)>> DictSerializeFieldForType { get; } = new Dictionary<Type, IDictionary<string, (FieldInfo Field, EnumFrogSerializationType Type, string Comment)>>();
+            public Dictionary<Type, IDictionary<string, (FieldInfo Field, string Comment)>> DictSerializeFieldForType { get; } = new Dictionary<Type, IDictionary<string, (FieldInfo Field, string Comment)>>();
 
             #endregion 属性
 
@@ -469,40 +456,6 @@ namespace FrogSerialization
                 mDictValuePath[StackCurrentPath.Peek()] = initObj;
             }
 
-            /// <summary>
-            /// 获取Xml对应的值
-            /// </summary>
-            /// <param name="value">Xml</param>
-            /// <returns>值</returns>
-            /// <remarks>引用的路径值为空时，对象为null。</remarks>
-            public object GetXmlValue(XElement value)
-            {
-                XAttribute attRef = FrogSerialization.FromXml_Reference(value);
-                if (attRef != null)
-                {
-                    // 值是一个引用
-                    if (string.IsNullOrEmpty(attRef.Value))
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        if (!mDictValuePath.ContainsKey(attRef.Value))
-                        {
-                            throw new Exception("引用对象不存在或尚未解析。");
-                        }
-                        return mDictValuePath[attRef.Value];
-                    }
-                }
-                else
-                {
-                    // 值为object
-                    object baseVal = FrogSerialization.FromXml_Object(this, value);
-                    mDictValuePath[StackCurrentPath.Peek()] = baseVal;
-                    FrogSerialization.DeserializeWithHelper(this, value, baseVal);
-                    return baseVal;
-                }
-            }
 
             #endregion 其它方法
 
@@ -573,7 +526,7 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="Obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private delegate void Delegate_DeserializeField(XmlReadHelper helper, XElement xml, object obj);
+        private delegate void Delegate_DeserializeField(XmlReadHelper helper, XElement xml, ref object obj);
 
         #endregion 委托
 
@@ -652,8 +605,7 @@ namespace FrogSerialization
         public static object Deserialize(XElement xml)
         {
             XmlReadHelper helper = new XmlReadHelper();
-            object obj = FromXml_Object(helper, xml);
-            return DeserializeWithHelper(helper, xml, obj);
+            return DeserializeWithHelper(helper, xml);
         }
 
         /// <summary>
@@ -662,46 +614,13 @@ namespace FrogSerialization
         /// <param name="helper">助手</param>
         /// <param name="obj">对象</param>
         /// <returns>Xml数据</returns>
-        private static XElement SerializeWithHelper(XmlWriteHelper helper, object obj)
+        private static XElement SerializeWithHelper_Simple(XmlWriteHelper helper, object obj)
         {
-            Type type = obj.GetType();
-            if (!helper.DictSerializeFieldForType.ContainsKey(type))
-            {
-                helper.DictSerializeFieldForType.Add(type, GetSerializableFields(type));
-            }
-            IDictionary<string, (FieldInfo Field, EnumFrogSerializationType Type, string Comment)> dict = helper.DictSerializeFieldForType[type];
             XElement element = ToXml_Object(helper, obj);
-            foreach (var item in dict)
-            {
-                switch (item.Value.Type)
-                {
-                    case EnumFrogSerializationType.NonSerialized:
-                        {
-                            Type fieldType = GetBaseSerializeType(item.Value.Field.FieldType);
-                            if (!mListSerializeFunc.ContainsKey(fieldType))
-                            {
-                                throw new Exception("字段类型无法序列化。");
-                            }
-                            XElement fieldXml = mListSerializeFunc[fieldType].SerializeFunc(helper, item.Value.Field, item.Value.Field.GetValue(obj));
-                            XComment comment = new XComment(item.Value.Comment);
-                            element.Add(comment);
-                            element.Add(fieldXml);
-                        }
-                        break;
-                    case EnumFrogSerializationType.Serializable:
-                        {
-                            object val = item.Value.Field.GetValue(obj);
-                            XElement fieldXml = GenerateXElement(Const_XmlNameEle_SerializableField,
-                                ToXml_TypeSimple(helper, val.GetType()),
-                                SerializeWithHelper(helper, val)
-                                );
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            return null;
+            Type type = obj.GetType();
+            Type baseType = GetBaseSerializeType(type);
+            element.Add(mListSerializeFunc[type].SerializeFunc(helper, null, obj));
+            return element;
         }
 
         /// <summary>
@@ -709,11 +628,84 @@ namespace FrogSerialization
         /// </summary>
         /// <param name="helper">助手</param>
         /// <param name="xml">Xml数据</param>
-        /// <param name="obj">对象</param>
+        /// <param name="type">对象类型</param>
         /// <returns>对象</returns>
-        private static object DeserializeWithHelper(XmlReadHelper helper, XElement xml, object obj)
+        private static object DeserializeWithHelper_Simple(XmlReadHelper helper, XElement xml, Type type)
+        {
+            Type baseType = GetBaseSerializeType(type);
+            XElement valXml = GetXElement(xml, Const_XmlNameEle_NonSerializeObject);
+            object val = null;
+            mListSerializeFunc[baseType].DeserializeFunc(helper, valXml, ref val);
+            return val;
+        }
+
+        /// <summary>
+        /// 序列化对象
+        /// </summary>
+        /// <param name = "helper" > 助手 </ param >
+        /// < param name="obj">对象</param>
+        /// <returns>Xml数据</returns>
+        private static XElement SerializeWithHelper(XmlWriteHelper helper, object obj)
+        {
+            Type type = obj.GetType();
+            if (IsSerializableType(type))
+            {
+                XElement element = ToXml_Object(helper, obj);
+                if (!helper.DictSerializeFieldForType.ContainsKey(type))
+                {
+                    helper.DictSerializeFieldForType.Add(type, GetSerializableFields(type));
+                }
+                IDictionary<string, (FieldInfo Field, string Comment)> dict = helper.DictSerializeFieldForType[type];
+                foreach (var item in dict)
+                {
+                    object val = item.Value.Field.GetValue(obj);
+                    Type valType = val.GetType();
+                    if (IsSerializableType(valType))
+                    {
+                        XElement field = GenerateXElement(Const_XmlNameEle_SerializableField,
+                            GenerateXAttribute(Const_XmlNameAtt_Field, item.Value.Field.Name),
+                            SerializeWithHelper(helper, val));
+                        element.Add(field);
+                    }
+                    else
+                    {
+                        Type baseType = GetBaseSerializeType(valType);
+                        element.Add(mListSerializeFunc[type].SerializeFunc(helper, item.Value.Field, obj));
+                    }
+                }
+                return element;
+            }
+            else
+            {
+                return SerializeWithHelper_Simple(helper, obj);
+            }
+
+        }
+
+        /// <summary>
+        /// 反序列化对象
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="xml">Xml数据</param>
+        /// <returns>对象</returns>
+        private static object DeserializeWithHelper(XmlReadHelper helper, XElement xml)
         {
             return null;
+        }
+
+        /// <summary>
+        /// 是否为可序列化类型
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static bool IsSerializableType(Type type)
+        {
+            Type baseType = type;
+            if (baseType.IsGenericType)
+            {
+                baseType = baseType.GetGenericTypeDefinition();
+            }
+            return !mListSerializeFunc.ContainsKey(baseType);
         }
 
         /// <summary>
@@ -723,9 +715,14 @@ namespace FrogSerialization
         /// <returns>转换类型</returns>
         private static Type GetBaseSerializeType(Type type)
         {
+            Type baseType = type;
+            if (baseType.IsGenericType)
+            {
+                baseType = baseType.GetGenericTypeDefinition();
+            }
             foreach (var item in mListSerializeFunc)
             {
-                if (type.IsAssignableFrom(item.Key))
+                if (baseType == item.Key)
                 {
                     return item.Key;
                 }
@@ -738,16 +735,16 @@ namespace FrogSerialization
         /// </summary>
         /// <param name="type">处理类型</param>
         /// <returns>处理结果</returns>
-        public static IDictionary<string, (FieldInfo Field, EnumFrogSerializationType Type, string Comment)> GetSerializableFields(Type type)
+        public static IDictionary<string, (FieldInfo Field, string Comment)> GetSerializableFields(Type type)
         {
             List<FieldInfo> fields = type.GetFields().ToList().Where(r => r.IsDefined(typeof(FrogSerializableAttribute), true)).ToList();
-            Dictionary<string, (FieldInfo Field, EnumFrogSerializationType Type, string Comment)> dict = new Dictionary<string, (FieldInfo Field, EnumFrogSerializationType Type, string Comment)>();
+            Dictionary<string, (FieldInfo Field, string Comment)> dict = new Dictionary<string, (FieldInfo Field, string Comment)>();
             foreach (FieldInfo field in fields)
             {
-                List<FrogSerializableAttribute> atts = field.GetCustomAttributes(true).Where(r=>r.GetType() == typeof(FrogSerializableAttribute)).Cast<FrogSerializableAttribute>().ToList();
+                List<FrogSerializableAttribute> atts = field.GetCustomAttributes(true).Where(r => r.GetType() == typeof(FrogSerializableAttribute)).Cast<FrogSerializableAttribute>().ToList();
                 if (atts.Count == 0) continue;
                 FrogSerializableAttribute att = atts.First();
-                dict.Add(field.Name, (field, att.SerializeType, att.Comment));
+                dict.Add(field.Name, (field, att.Comment));
             }
             return dict;
         }
@@ -767,8 +764,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_Bool(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField, 
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -781,12 +778,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_Bool(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_Bool(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, (bool)valAtt);
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, (bool)valAtt);
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = (bool)valAtt;
+            }
         }
 
         #endregion Bool
@@ -802,8 +807,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_Byte(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -816,12 +821,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_Byte(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_Byte(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, byte.Parse(valAtt.Value));
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, byte.Parse(valAtt.Value));
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = byte.Parse(valAtt.Value);
+            }
         }
 
         #endregion Byte
@@ -837,8 +850,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_Char(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -851,12 +864,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_Char(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_Char(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, char.Parse(valAtt.Value));
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, char.Parse(valAtt.Value));
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = char.Parse(valAtt.Value);
+            }
         }
 
         #endregion Char
@@ -872,8 +893,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_Decimal(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -886,12 +907,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_Decimal(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_Decimal(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, decimal.Parse(valAtt.Value));
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, decimal.Parse(valAtt.Value));
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = decimal.Parse(valAtt.Value);
+            }
         }
 
         #endregion Decimal
@@ -907,8 +936,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_Double(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -921,12 +950,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_Double(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_Double(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, (double)valAtt);
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, (double)valAtt);
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = (double)valAtt;
+            }
         }
 
         #endregion Double
@@ -942,8 +979,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_Enum(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, Enum.GetName(val.GetType(), val)),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -956,14 +993,24 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_Enum(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_Enum(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            XAttribute typeXml = GetXAttribute(xml, Const_XmlNameAtt_Type);
-            Type type = FromXml_TypeSimple(helper, typeXml);
-            field.SetValue(obj, Enum.Parse(type, valAtt.Value));
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                XAttribute typeXml = GetXAttribute(xml, Const_XmlNameAtt_Type);
+                Type type = FromXml_TypeSimple(helper, typeXml);
+                field.SetValue(obj, Enum.Parse(type, valAtt.Value));
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                XAttribute typeXml = GetXAttribute(xml, Const_XmlNameAtt_Type);
+                Type type = FromXml_TypeSimple(helper, typeXml);
+                obj = Enum.Parse(type, valAtt.Value);
+            }
         }
 
         #endregion Enum
@@ -979,8 +1026,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_Float(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -993,12 +1040,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_Float(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_Float(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, (float)valAtt);
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, (float)valAtt);
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = (float)valAtt;
+            }
         }
 
         #endregion Float
@@ -1014,8 +1069,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_Int(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -1028,12 +1083,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_Int(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_Int(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, (int)valAtt);
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, (int)valAtt);
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = (int)valAtt;
+            }
         }
 
         #endregion Int
@@ -1049,8 +1112,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_Long(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -1063,12 +1126,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_Long(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_Long(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj,(long)valAtt);
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, (long)valAtt);
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = (long)valAtt;
+            }
         }
 
         #endregion Long
@@ -1084,8 +1155,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_SByte(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -1098,12 +1169,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_SByte(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_SByte(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, (sbyte)valAtt);
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, (sbyte)valAtt);
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = (sbyte)valAtt;
+            }
         }
 
         #endregion SByte
@@ -1119,8 +1198,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_Short(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -1133,12 +1212,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_Short(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_Short(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, (short)valAtt);
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, (short)valAtt);
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = (short)valAtt;
+            }
         }
 
         #endregion Short
@@ -1154,8 +1241,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_String(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -1168,12 +1255,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_String(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_String(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, valAtt.Value);
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, valAtt.Value);
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = valAtt.Value;
+            }
         }
 
         #endregion String
@@ -1189,8 +1284,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_UInt(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -1203,12 +1298,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_UInt(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_UInt(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, (uint)valAtt);
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, (uint)valAtt);
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = (uint)valAtt;
+            }
         }
 
         #endregion UInt
@@ -1224,8 +1327,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_ULong(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -1238,12 +1341,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_ULong(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_ULong(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, (ulong)valAtt);
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, (ulong)valAtt);
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = (ulong)valAtt;
+            }
         }
 
         #endregion ULong
@@ -1259,8 +1370,8 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_UShort(XmlWriteHelper helper, FieldInfo field, object val)
         {
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, val),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -1273,12 +1384,20 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_UShort(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_UShort(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            field.SetValue(obj, ushort.Parse(valAtt.Value));
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(obj, ushort.Parse(valAtt.Value));
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = ushort.Parse(valAtt.Value);
+            }
         }
 
         #endregion UShort
@@ -1299,8 +1418,8 @@ namespace FrogSerialization
                 throw new Exception("错误的资源类型");
             }
             string path = AssetDatabase.GetAssetPath(obj);
-            return GenerateXElement(Const_XmlNameEle_NonSerializedField,
-                GenerateXAttribute(Const_XmlNameAtt_Field, field.Name),
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
                 GenerateXAttribute(Const_XmlNameAtt_Value, path),
                 ToXml_TypeSimple(helper, val.GetType())
                 );
@@ -1313,16 +1432,156 @@ namespace FrogSerialization
         /// <param name="xml">Xml数据</param>
         /// <param name="obj">字段所属对象</param>
         /// <returns>Xml数据</returns>
-        private static void FromXml_Asset(XmlReadHelper helper, XElement xml, object obj)
+        private static void FromXml_Asset(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-            FieldInfo field = obj.GetType().GetField(fieldName);
-            XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-            UnityEngine.Object asset = AssetDatabase.LoadMainAssetAtPath(valAtt.Value);
-            field.SetValue(obj, asset);
+            if (xml.Attribute(Const_XmlNameAtt_Field) != null)
+            {
+                string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                UnityEngine.Object asset = AssetDatabase.LoadMainAssetAtPath(valAtt.Value);
+                field.SetValue(obj, asset);
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                obj = AssetDatabase.LoadMainAssetAtPath(valAtt.Value);
+            }
         }
 
         #endregion Asset
+
+        //#region Array
+
+        ///// <summary>
+        ///// 序列化字段(Array)
+        ///// </summary>
+        ///// <param name="helper">助手</param>
+        ///// <param name="field">字段</param>
+        ///// <param name="val">值</param>
+        ///// <returns>Xml数据</returns>
+        //private static XElement ToXml_Array(XmlWriteHelper helper, FieldInfo field, object val)
+        //{
+        //    if (!val.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(Array)))
+        //    {
+        //        throw new Exception("错误的数组类型");
+        //    }
+        //    Array array = val as Array;
+        //    XElement element = ToXml_Object(helper, val);
+        //    foreach (var item in array)
+        //    {
+        //        element.Add(SerializeWithHelper(helper, item));
+        //    }
+
+        //    return element;
+        //}
+
+        ///// <summary>
+        ///// 反序列化字段(Array)
+        ///// </summary>
+        ///// <param name="helper">助手</param>
+        ///// <param name="xml">Xml数据</param>
+        ///// <param name="obj">字段所属对象</param>
+        ///// <returns>Xml数据</returns>
+        //private static void FromXml_Array(XmlReadHelper helper, XElement xml, ref object obj)
+        //{
+        //    Array  array = FromXml_Object(helper, xml) as Array;
+
+        //    IEnumerable<XElement> elements = GetXElements(xml, Const_XmlNameEle_Object);
+
+        //    foreach (var item in elements)
+        //    {
+        //        object chlid = DeserializeWithHelper(helper, item);
+        //        array.
+        //    }
+        //    string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+        //    FieldInfo field = obj.GetType().GetField(fieldName);
+        //    field.SetValue(obj, array);
+        //}
+
+        //#endregion Array
+
+        //#region List
+
+        ///// <summary>
+        ///// 序列化字段(List)
+        ///// </summary>
+        ///// <param name="helper">助手</param>
+        ///// <param name="field">字段</param>
+        ///// <param name="val">值</param>
+        ///// <returns>Xml数据</returns>
+        //private static XElement ToXml_List(XmlWriteHelper helper, FieldInfo field, object val)
+        //{
+        //    if (!(val is UnityEngine.Object obj))
+        //    {
+        //        throw new Exception("错误的资源类型");
+        //    }
+        //    string path = ListDatabase.GetListPath(obj);
+        //    return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+        //        field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
+        //        GenerateXAttribute(Const_XmlNameAtt_Value, path),
+        //        ToXml_TypeSimple(helper, val.GetType())
+        //        );
+        //}
+
+        ///// <summary>
+        ///// 反序列化字段(List)
+        ///// </summary>
+        ///// <param name="helper">助手</param>
+        ///// <param name="xml">Xml数据</param>
+        ///// <param name="obj">字段所属对象</param>
+        ///// <returns>Xml数据</returns>
+        //private static void FromXml_List(XmlReadHelper helper, XElement xml, ref object obj)
+        //{
+        //    string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+        //    FieldInfo field = obj.GetType().GetField(fieldName);
+        //    XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+        //    UnityEngine.Object List = ListDatabase.LoadMainListAtPath(valAtt.Value);
+        //    field.SetValue(obj, List);
+        //}
+
+        //#endregion List
+
+        //#region Dictionary
+
+        ///// <summary>
+        ///// 序列化字段(Dictionary)
+        ///// </summary>
+        ///// <param name="helper">助手</param>
+        ///// <param name="field">字段</param>
+        ///// <param name="val">值</param>
+        ///// <returns>Xml数据</returns>
+        //private static XElement ToXml_Dictionary(XmlWriteHelper helper, FieldInfo field, object val)
+        //{
+        //    if (!(val is UnityEngine.Object obj))
+        //    {
+        //        throw new Exception("错误的资源类型");
+        //    }
+        //    string path = DictionaryDatabase.GetDictionaryPath(obj);
+        //    return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+        //        field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
+        //        GenerateXAttribute(Const_XmlNameAtt_Value, path),
+        //        ToXml_TypeSimple(helper, val.GetType())
+        //        );
+        //}
+
+        ///// <summary>
+        ///// 反序列化字段(Dictionary)
+        ///// </summary>
+        ///// <param name="helper">助手</param>
+        ///// <param name="xml">Xml数据</param>
+        ///// <param name="obj">字段所属对象</param>
+        ///// <returns>Xml数据</returns>
+        //private static void FromXml_Dictionary(XmlReadHelper helper, XElement xml, ref object obj)
+        //{
+        //    string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
+        //    FieldInfo field = obj.GetType().GetField(fieldName);
+        //    XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+        //    UnityEngine.Object Dictionary = DictionaryDatabase.LoadMainDictionaryAtPath(valAtt.Value);
+        //    field.SetValue(obj, Dictionary);
+        //}
+
+        //#endregion Dictionary
 
         #endregion 类型处理方法
 
@@ -1371,7 +1630,8 @@ namespace FrogSerialization
         /// <returns>生成元素</returns>
         private static XElement GenerateXElement(XName name, params object[] content)
         {
-            return new XElement(name, content);
+            object[] temp = content.Where(r => r != null).ToArray();
+            return new XElement(name, temp);
         }
 
         /// <summary>
@@ -1760,7 +2020,7 @@ namespace FrogSerialization
     /// 可序列化字段特性
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
-    public class FrogSerializableAttribute : Attribute
+    public sealed class FrogSerializableAttribute : Attribute
     {
         #region 内部声明
 
@@ -1795,11 +2055,6 @@ namespace FrogSerialization
         /// </summary>
         public string Comment { set; get; }
 
-        /// <summary>
-        /// 序列化类型
-        /// </summary>
-        public EnumFrogSerializationType SerializeType { set; get; }
-
         #endregion 属性
 
         #region 字段
@@ -1817,10 +2072,8 @@ namespace FrogSerialization
         /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="type">序列化类型</param>
-        public FrogSerializableAttribute(EnumFrogSerializationType type)
+        public FrogSerializableAttribute()
         {
-            SerializeType = type;
         }
 
         #endregion 构造函数
