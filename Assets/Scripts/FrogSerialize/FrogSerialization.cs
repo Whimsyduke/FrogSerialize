@@ -601,11 +601,12 @@ namespace FrogSerialization
         /// 反序列化对象
         /// </summary>
         /// <param name="xml">Xml数据</param>
+        /// <param name="obj">对象，为空时自动新建，否则修改字段值</param>
         /// <returns>对象</returns>
-        public static object Deserialize(XElement xml)
+        public static void Deserialize(XElement xml, ref object obj)
         {
             XmlReadHelper helper = new XmlReadHelper();
-            return DeserializeWithHelper(helper, xml);
+            DeserializeWithHelper(helper, xml, ref obj);
         }
 
         /// <summary>
@@ -679,7 +680,6 @@ namespace FrogSerialization
             {
                 return SerializeWithHelper_Simple(helper, obj);
             }
-
         }
 
         /// <summary>
@@ -687,10 +687,59 @@ namespace FrogSerialization
         /// </summary>
         /// <param name="helper">助手</param>
         /// <param name="xml">Xml数据</param>
+        /// <param name="obj">对象，为空时自动新建，否则修改字段值</param>
         /// <returns>对象</returns>
-        private static object DeserializeWithHelper(XmlReadHelper helper, XElement xml)
+        private static void DeserializeWithHelper(XmlReadHelper helper, XElement xml, ref object obj)
         {
-            return null;
+            XAttribute typeAtt = GetXAttribute(xml, Const_XmlNameAtt_Type);
+            Type objType = FromXml_TypeSimple(helper, typeAtt);
+            if (IsSerializableType(objType))
+            {
+                if (obj != null && obj.GetType() != objType)
+                {
+                    throw new Exception("给定的对象和xml的变量类型不匹配");
+                }
+                if (obj == null)
+                {
+                    obj = FromXml_Object(helper, xml);
+                }
+                if (!helper.DictSerializeFieldForType.ContainsKey(objType))
+                {
+                    helper.DictSerializeFieldForType.Add(objType, GetSerializableFields(objType));
+                }
+                IDictionary<string, (FieldInfo Field, string Comment)> dict = helper.DictSerializeFieldForType[objType];
+                IEnumerable<XElement> fieldXml = GetXElements(xml, Const_XmlNameEle_NonSerializedField);
+                foreach (XElement field in fieldXml)
+                {
+                    XAttribute nameAtt = GetXAttribute(field, Const_XmlNameAtt_Name);
+                    if (!dict.ContainsKey(nameAtt.Value))
+                    {
+                        throw new Exception("字段没有标记为可序列化。");
+                    }
+                    XElement valXml = GetXElement(field, Const_XmlNameEle_Object);
+                    object value = null;
+                    DeserializeWithHelper(helper, valXml, ref value);
+                    dict[nameAtt.Value].Field.SetValue(obj, value);
+                }
+                fieldXml = GetXElements(xml, Const_XmlNameEle_SerializableField);
+                foreach (XElement field in fieldXml)
+                {
+                    XAttribute nameAtt = GetXAttribute(field, Const_XmlNameAtt_Name);
+                    if (!dict.ContainsKey(nameAtt.Value))
+                    {
+                        throw new Exception("字段没有标记为可序列化。");
+                    }
+                    XAttribute valTypeAtt = GetXAttribute(field, Const_XmlNameAtt_Type);
+                    Type valType = FromXml_TypeSimple(helper, valTypeAtt);
+                    object value = null;
+                    mListSerializeFunc[valType].DeserializeFunc(helper, field, ref value);
+                    dict[nameAtt.Value].Field.SetValue(obj, value);
+                }
+            }
+            else
+            {
+                obj = DeserializeWithHelper_Simple(helper, xml, objType);
+            }
         }
 
         /// <summary>
@@ -1900,11 +1949,11 @@ namespace FrogSerialization
         /// <summary>
         /// 读取Type的简单名称
         /// </summary>
-        /// <param name="xml">类型Xml</param>
+        /// <param name="att">类型Xml</param>
         /// <returns>类型</returns>
-        private static Type FromXml_TypeSimple(XmlReadHelper helper, XAttribute xml)
+        private static Type FromXml_TypeSimple(XmlReadHelper helper, XAttribute att)
         {
-            return helper.GetType(xml.Value);
+            return helper.GetType(att.Value);
         }
 
         /// <summary>
