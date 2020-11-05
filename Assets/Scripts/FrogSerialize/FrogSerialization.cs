@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using UnityEngine;
 using UnityEditor;
 
 namespace FrogSerialization
@@ -38,6 +39,14 @@ namespace FrogSerialization
         #region 内部声明
 
         #region 常量
+
+        #region 文档名称
+
+        private const string Const_XmlNameDoc_Document = "Document";
+        private const string Const_XmlNameDoc_TypeList = "TypeList";
+        private const string Const_XmlNameDoc_ObjectList = "ObjectList";
+
+        #endregion 文档名称
 
         #region 元素名称
 
@@ -73,6 +82,23 @@ namespace FrogSerialization
         public static readonly object[] Const_NoElementObjectArray = Array.Empty<object>();
 
         #endregion 公共默认参数
+
+        #region 素材类型
+
+        /// <summary>
+        /// 视为素材的类型，这个类型会尝试用Database查找对应文件
+        /// </summary>
+        private static readonly IList<Type> Const_ListAssetType = new List<Type>()
+        {
+            typeof(AudioClip),
+            typeof(GameObject),
+            typeof(Material),
+            typeof(ScriptableObject),
+            typeof(Texture2D),
+            typeof(TextAsset),
+        };
+
+        #endregion 素材类型
 
         #endregion 常量
 
@@ -367,7 +393,7 @@ namespace FrogSerialization
                 foreach (var select in mDictType)
                 {
                     if (select.Value.IsDefinition) continue;
-                    xml.Add(FrogSerialization.ToXml_TypeInfo(select.Value.Name, select.Key));
+                    xml.Add(ToXml_TypeInfo(select.Value.Name, select.Key));
                 }
             }
 
@@ -551,21 +577,21 @@ namespace FrogSerialization
             new Dictionary<Type, (Type ValueType, Delegate_SerializeField SerializeFunc, Delegate_DeserializeField DeserializeFunc)>()
             {
                 { typeof(bool), (typeof(bool), ToXml_Bool, FromXml_Bool) },
-                { typeof(bool), (typeof(byte), ToXml_Byte, FromXml_Byte) },
-                { typeof(bool), (typeof(char), ToXml_Char, FromXml_Char) },
-                { typeof(bool), (typeof(decimal), ToXml_Decimal, FromXml_Decimal) },
-                { typeof(bool), (typeof(double), ToXml_Double, FromXml_Double) },
-                { typeof(bool), (typeof(Enum), ToXml_Enum, FromXml_Enum) },
-                { typeof(bool), (typeof(float), ToXml_Float, FromXml_Float) },
-                { typeof(bool), (typeof(int), ToXml_Int, FromXml_Int) },
-                { typeof(bool), (typeof(long), ToXml_Long, FromXml_Long) },
-                { typeof(bool), (typeof(sbyte), ToXml_SByte, FromXml_SByte) },
-                { typeof(bool), (typeof(short), ToXml_Short, FromXml_Short) },
-                { typeof(bool), (typeof(string), ToXml_String, FromXml_String) },
-                { typeof(bool), (typeof(uint), ToXml_UInt, FromXml_UInt) },
-                { typeof(bool), (typeof(ulong), ToXml_ULong, FromXml_ULong) },
-                { typeof(bool), (typeof(ushort), ToXml_UShort, FromXml_UShort) },
-                { typeof(bool), (typeof(UnityEngine.Object), ToXml_Asset, FromXml_Asset) },
+                { typeof(byte), (typeof(byte), ToXml_Byte, FromXml_Byte) },
+                { typeof(char), (typeof(char), ToXml_Char, FromXml_Char) },
+                { typeof(decimal), (typeof(decimal), ToXml_Decimal, FromXml_Decimal) },
+                { typeof(double), (typeof(double), ToXml_Double, FromXml_Double) },
+                { typeof(Enum), (typeof(Enum), ToXml_Enum, FromXml_Enum) },
+                { typeof(float), (typeof(float), ToXml_Float, FromXml_Float) },
+                { typeof(int), (typeof(int), ToXml_Int, FromXml_Int) },
+                { typeof(long), (typeof(long), ToXml_Long, FromXml_Long) },
+                { typeof(sbyte), (typeof(sbyte), ToXml_SByte, FromXml_SByte) },
+                { typeof(short), (typeof(short), ToXml_Short, FromXml_Short) },
+                { typeof(string), (typeof(string), ToXml_String, FromXml_String) },
+                { typeof(uint), (typeof(uint), ToXml_UInt, FromXml_UInt) },
+                { typeof(ulong), (typeof(ulong), ToXml_ULong, FromXml_ULong) },
+                { typeof(ushort), (typeof(ushort), ToXml_UShort, FromXml_UShort) },
+                { typeof(UnityEngine.Object), (typeof(UnityEngine.Object), ToXml_Asset, FromXml_Asset) },
             };
 
         #endregion 字段
@@ -594,7 +620,12 @@ namespace FrogSerialization
         public static XElement Serialize(object obj)
         {
             XmlWriteHelper helper = new XmlWriteHelper();
-            return SerializeWithHelper(helper, obj);
+            XElement doc = ToXml_Document();
+            XElement xmlTypeList = FromXml_TypeList(doc);
+            XElement xmlObjList = FromXml_ObjectList(doc);
+            xmlObjList.Add(SerializeWithHelper(helper, obj));
+            helper.GenerateTypeList(xmlTypeList);
+            return doc;
         }
 
         /// <summary>
@@ -605,8 +636,13 @@ namespace FrogSerialization
         /// <returns>对象</returns>
         public static void Deserialize(XElement xml, ref object obj)
         {
+            CheckXelementName(xml, Const_XmlNameDoc_Document);
             XmlReadHelper helper = new XmlReadHelper();
-            DeserializeWithHelper(helper, xml, ref obj);
+            XElement xmlTypeList = FromXml_TypeList(xml);
+            XElement xmlObjList = FromXml_ObjectList(xml);
+            helper.InitTypeList(xmlTypeList);
+            XElement ObjXml = GetXElement(xmlObjList, Const_XmlNameEle_Object);
+            DeserializeWithHelper(helper, ObjXml, ref obj);
         }
 
         /// <summary>
@@ -659,6 +695,8 @@ namespace FrogSerialization
                 IDictionary<string, (FieldInfo Field, string Comment)> dict = helper.DictSerializeFieldForType[type];
                 foreach (var item in dict)
                 {
+                    XComment comment = new XComment(item.Value.Comment);
+                    element.Add(comment);
                     object val = item.Value.Field.GetValue(obj);
                     Type valType = val.GetType();
                     if (IsSerializableType(valType))
@@ -671,7 +709,7 @@ namespace FrogSerialization
                     else
                     {
                         Type baseType = GetBaseSerializeType(valType);
-                        element.Add(mListSerializeFunc[type].SerializeFunc(helper, item.Value.Field, obj));
+                        element.Add(mListSerializeFunc[baseType].SerializeFunc(helper, item.Value.Field, item.Value.Field.GetValue(obj)));
                     }
                 }
                 return element;
@@ -711,7 +749,20 @@ namespace FrogSerialization
                 IEnumerable<XElement> fieldXml = GetXElements(xml, Const_XmlNameEle_NonSerializedField);
                 foreach (XElement field in fieldXml)
                 {
-                    XAttribute nameAtt = GetXAttribute(field, Const_XmlNameAtt_Name);
+                    XAttribute nameAtt = GetXAttribute(field, Const_XmlNameAtt_Field);
+                    if (!dict.ContainsKey(nameAtt.Value))
+                    {
+                        throw new Exception("字段没有标记为可序列化。");
+                    }
+                    XAttribute valTypeAtt = GetXAttribute(field, Const_XmlNameAtt_Type);
+                    Type valType = FromXml_TypeSimple(helper, valTypeAtt);
+                    Type varTypeBase = GetBaseSerializeType(valType);
+                    mListSerializeFunc[varTypeBase].DeserializeFunc(helper, field, ref obj);
+                }
+                fieldXml = GetXElements(xml, Const_XmlNameEle_SerializableField);
+                foreach (XElement field in fieldXml)
+                {
+                    XAttribute nameAtt = GetXAttribute(field, Const_XmlNameAtt_Field);
                     if (!dict.ContainsKey(nameAtt.Value))
                     {
                         throw new Exception("字段没有标记为可序列化。");
@@ -719,20 +770,6 @@ namespace FrogSerialization
                     XElement valXml = GetXElement(field, Const_XmlNameEle_Object);
                     object value = null;
                     DeserializeWithHelper(helper, valXml, ref value);
-                    dict[nameAtt.Value].Field.SetValue(obj, value);
-                }
-                fieldXml = GetXElements(xml, Const_XmlNameEle_SerializableField);
-                foreach (XElement field in fieldXml)
-                {
-                    XAttribute nameAtt = GetXAttribute(field, Const_XmlNameAtt_Name);
-                    if (!dict.ContainsKey(nameAtt.Value))
-                    {
-                        throw new Exception("字段没有标记为可序列化。");
-                    }
-                    XAttribute valTypeAtt = GetXAttribute(field, Const_XmlNameAtt_Type);
-                    Type valType = FromXml_TypeSimple(helper, valTypeAtt);
-                    object value = null;
-                    mListSerializeFunc[valType].DeserializeFunc(helper, field, ref value);
                     dict[nameAtt.Value].Field.SetValue(obj, value);
                 }
             }
@@ -754,6 +791,20 @@ namespace FrogSerialization
             {
                 baseType = baseType.GetGenericTypeDefinition();
             }
+            else if (typeof(Enum).IsAssignableFrom(baseType))
+            {
+                baseType = typeof(Enum);
+            }
+            else
+            {
+                foreach (Type assetType in Const_ListAssetType)
+                {
+                    if (assetType.IsAssignableFrom(baseType))
+                    {
+                        baseType = typeof(UnityEngine.Object);
+                    }
+                }
+            }
             return !mListSerializeFunc.ContainsKey(baseType);
         }
 
@@ -768,6 +819,20 @@ namespace FrogSerialization
             if (baseType.IsGenericType)
             {
                 baseType = baseType.GetGenericTypeDefinition();
+            }
+            else if (typeof(Enum).IsAssignableFrom(baseType))
+            {
+                baseType = typeof(Enum);
+            }
+            else
+            {
+                foreach (Type assetType in Const_ListAssetType)
+                {
+                    if (assetType.IsAssignableFrom(baseType))
+                    {
+                        baseType = typeof(UnityEngine.Object);
+                    }
+                }
             }
             foreach (var item in mListSerializeFunc)
             {
@@ -1956,36 +2021,6 @@ namespace FrogSerialization
             return helper.GetType(att.Value);
         }
 
-        /// <summary>
-        /// 生成类型信息
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        private static XElement ToXml_TypeInfo(string name, Type type)
-        {
-            return GenerateXElement(
-                    Const_XmlNameEle_TypeInfo,
-                    GenerateXAttribute(
-                        Const_XmlNameAtt_Name, name
-                        ),
-                    ToXml_Type(type)
-                    );
-        }
-
-        /// <summary>
-        /// 获取类型信息
-        /// </summary>
-        /// <param name="xml">文档Xml</param>
-        /// <returns>类型信息</returns>
-        private static (string Name, Type Type) FromXml_TypeInfo(XElement xml)
-        {
-            XAttribute nameAtt = GetXAttribute(xml, Const_XmlNameAtt_Name);
-            XElement typeXml = GetXElement(xml, Const_XmlNameEle_Type);
-            Type type = FromXml_Type(typeXml);
-            return (nameAtt.Value, type);
-        }
-
         #endregion Type
 
         #region Reference
@@ -2045,6 +2080,74 @@ namespace FrogSerialization
         }
 
         #endregion Object
+
+        #region Document
+
+        /// <summary>
+        /// 获取文档XElement
+        /// </summary>
+        /// <returns>XEl对象</returns>
+        public static XElement ToXml_Document()
+        {
+            return GenerateXElement(Const_XmlNameDoc_Document,
+                GenerateXElement(Const_XmlNameDoc_TypeList),
+                GenerateXElement(Const_XmlNameDoc_ObjectList)
+                );
+        }
+
+        /// <summary>
+        /// 获取类型列表Xml
+        /// </summary>
+        /// <param name="xml">文档Xml</param>
+        /// <returns>列表Xml</returns>
+        public static XElement FromXml_TypeList(XElement xml)
+        {
+            CheckXelementName(xml, Const_XmlNameDoc_Document);
+            return GetXElement(xml, Const_XmlNameDoc_TypeList);
+        }
+
+        /// <summary>
+        /// 获取类型对象Xml
+        /// </summary>
+        /// <param name="xml">文档Xml</param>
+        /// <returns>对象Xml</returns>
+        public static XElement FromXml_ObjectList(XElement xml)
+        {
+            CheckXelementName(xml, Const_XmlNameDoc_Document);
+            return GetXElement(xml, Const_XmlNameDoc_ObjectList);
+        }
+
+        /// <summary>
+        /// 生成类型信息
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static XElement ToXml_TypeInfo(string name, Type type)
+        {
+            return GenerateXElement(
+                    Const_XmlNameEle_TypeInfo,
+                    GenerateXAttribute(
+                        Const_XmlNameAtt_Name, name
+                        ),
+                    ToXml_Type(type)
+                    );
+        }
+
+        /// <summary>
+        /// 获取类型信息
+        /// </summary>
+        /// <param name="xml">文档Xml</param>
+        /// <returns>类型信息</returns>
+        private static (string Name, Type Type) FromXml_TypeInfo(XElement xml)
+        {
+            XAttribute nameAtt = GetXAttribute(xml, Const_XmlNameAtt_Name);
+            XElement typeXml = GetXElement(xml, Const_XmlNameEle_Type);
+            Type type = FromXml_Type(typeXml);
+            return (nameAtt.Value, type);
+        }
+
+        #endregion Document
 
         #endregion 通用方法
 
