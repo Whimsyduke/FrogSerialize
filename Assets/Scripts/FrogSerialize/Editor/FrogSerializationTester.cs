@@ -48,7 +48,7 @@ namespace FrogSerialization
         /// <summary>
         /// 测试类基础
         /// </summary>
-        public class Test_ToXmlBase
+        public abstract class Test_ToXmlBase
         {
             #region 内部声明
 
@@ -103,6 +103,11 @@ namespace FrogSerialization
             #region 方法
 
             #region 通用方法
+
+            /// <summary>
+            /// 随机字段
+            /// </summary>
+            public abstract void RandomField();
 
             #endregion 通用方法
 
@@ -426,6 +431,12 @@ namespace FrogSerialization
 
             #region Serializable
 
+            /// <summary>
+            /// 可序列化字段
+            /// </summary>
+            [FrogSerializable(Comment = "Serializable")]
+            public Test_ToXmlBase SerializableVal = new Test_ToXmlOther();
+
             #endregion Serializable
 
             #region 不序列化属性
@@ -458,9 +469,10 @@ namespace FrogSerialization
             /// <summary>
             /// 随机字段
             /// </summary>
-            public void RandomField()
+            public override void RandomField()
             {
                 System.Random random = new System.Random();
+                ParentField = random.Next(int.MinValue, int.MaxValue);
                 BoolVal = random.Next(0,2) == 0;
                 ByteVal = (byte)random.Next(byte.MinValue, byte.MaxValue);
                 CharVal = (char)random.Next('\u4E00', '\u9FA5');
@@ -478,7 +490,7 @@ namespace FrogSerialization
                 UShortVal = (ushort)random.Next(ushort.MinValue, ushort.MaxValue);
                 MaterialVal = AssetDatabase.LoadMainAssetAtPath(random.Next(0, 2) == 0? Const_PathMaterialB : Const_PathMaterialC) as Material;
                 NonSerializedInt = random.Next(int.MinValue, IntValDefault);
-                ParentField = random.Next(int.MinValue, int.MaxValue);
+                SerializableVal.RandomField();
             }
 
             /// <summary>
@@ -488,6 +500,7 @@ namespace FrogSerialization
             /// <returns>测试结果</returns>
             public bool ValueEqual(Test_ToXml tester)
             {
+                if (ParentField != tester.ParentField) throw new Exception($"{nameof(ParentField)} is not equal!");
                 if (BoolVal != tester.BoolVal) throw new Exception($"{nameof(BoolVal)} is not equal!");
                 if (ByteVal != tester.ByteVal) throw new Exception($"{nameof(ByteVal)} is not equal!");
                 if (CharVal != tester.CharVal) throw new Exception($"{nameof(CharVal)} is not equal!");
@@ -505,6 +518,139 @@ namespace FrogSerialization
                 if (UShortVal != tester.UShortVal) throw new Exception($"{nameof(UShortVal)} is not equal!");
                 if (MaterialVal.color != tester.MaterialVal.color) throw new Exception($"{nameof(MaterialVal)} is not equal!");
                 if (NonSerializedInt == tester.NonSerializedInt) throw new Exception($"{nameof(NonSerializedInt)} is not equal!");
+                if (!(SerializableVal as Test_ToXmlOther).ValueEqual(tester.SerializableVal as Test_ToXmlOther)) throw new Exception($"{nameof(SerializableVal)} is not equal!");
+                return true;
+            }
+
+            #endregion 通用方法
+
+            #region 重写方法
+
+            #endregion 重写方法
+
+            #region 事件方法
+
+            #endregion 事件方法 
+
+            #endregion 方法
+        }
+
+        /// <summary>
+        /// 测试类其它
+        /// </summary>
+        public class Test_ToXmlOther : Test_ToXmlBase
+        {
+            #region 内部声明
+
+            #region 常量
+
+            #endregion 常量
+
+            #region 枚举
+
+            #endregion 枚举
+
+            #region 定义
+
+            #endregion 定义
+
+            #region 委托
+
+            #endregion 委托
+
+            #endregion 内部声明
+
+            #region 属性字段
+
+            #region 静态属性
+
+            #endregion 静态属性
+
+            #region 属性
+
+            #endregion 属性
+
+            #region 字段
+
+            #region SerializableNull
+
+            /// <summary>
+            /// 可序列化字段
+            /// </summary>
+            [FrogSerializable(Comment = "SerializableNull")]
+            public Test_ToXmlBase SerializableNullVal = null;
+
+            #endregion SerializableNull
+
+            #region Self
+
+            /// <summary>
+            /// 可序列化字段
+            /// </summary>
+            [FrogSerializable(Comment = "Self")]
+            public Test_ToXmlOther ThisVal;
+
+            #endregion Self
+
+
+            #region Int
+
+            /// <summary>
+            /// Int默认常量值
+            /// </summary>
+            public const int IntValDefault = 1024;
+
+            /// <summary>
+            /// Int字段
+            /// </summary>
+            [FrogSerializable(Comment = "Int")]
+            public int IntVal = IntValDefault;
+
+            #endregion Int
+
+            #endregion 字段
+
+            #region 事件
+
+            #endregion 事件
+
+            #endregion 属性字段
+
+            #region 构造函数
+
+            /// <summary>
+            /// 构造函数
+            /// </summary>
+            public Test_ToXmlOther()
+            {
+               
+            }
+
+            #endregion 构造函数
+
+            #region 方法
+
+            #region 通用方法
+
+            /// <summary>
+            /// 随机字段
+            /// </summary>
+            public override void RandomField()
+            {
+                System.Random random = new System.Random();
+                IntVal = random.Next(int.MinValue, int.MaxValue);
+                ParentField = random.Next(int.MinValue, int.MaxValue);
+                ThisVal = this;
+            }
+
+            /// <summary>
+            /// 数据相同验证
+            /// </summary>
+            /// <param name="tester">测试对象</param>
+            /// <returns>测试结果</returns>
+            public bool ValueEqual(Test_ToXmlOther tester)
+            {
+                if (IntVal != tester.IntVal) throw new Exception($"{nameof(IntVal)} is not equal!");
                 if (ParentField != tester.ParentField) throw new Exception($"{nameof(ParentField)} is not equal!");
                 return true;
             }
@@ -520,6 +666,7 @@ namespace FrogSerialization
             #endregion 事件方法 
 
             #endregion 方法
+
         }
 
         #endregion 定义

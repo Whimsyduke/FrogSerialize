@@ -708,7 +708,7 @@ namespace FrogSerialization
                         {
                             XElement field = GenerateXElement(Const_XmlNameEle_SerializableField,
                                 GenerateXAttribute(Const_XmlNameAtt_Field, item.Value.Field.Name),
-                                SerializeWithHelper(helper, val));
+                                val == null ? null : SerializeWithHelper(helper, val));
                             element.Add(field);
                         }
                         else
@@ -775,9 +775,9 @@ namespace FrogSerialization
                     {
                         throw new Exception("字段没有标记为可序列化。");
                     }
-                    XElement valXml = GetXElement(field, Const_XmlNameEle_Object);
+                    XElement valXml = GetXElement(field, Const_XmlNameEle_Object, true, true);
                     object value = null;
-                    DeserializeWithHelper(helper, valXml, ref value);
+                    if (valXml != null) DeserializeWithHelper(helper, valXml, ref value);
                     dict[nameAtt.Value].Field.SetValue(obj, value);
                 }
             }
@@ -807,7 +807,7 @@ namespace FrogSerialization
             {
                 foreach (Type assetType in Const_ListAssetType)
                 {
-                    if (assetType.IsAssignableFrom(baseType))
+                    if (assetType == baseType)
                     {
                         baseType = typeof(UnityEngine.Object);
                     }
@@ -836,7 +836,7 @@ namespace FrogSerialization
             {
                 foreach (Type assetType in Const_ListAssetType)
                 {
-                    if (assetType.IsAssignableFrom(baseType))
+                    if (assetType == baseType)
                     {
                         baseType = typeof(UnityEngine.Object);
                     }
