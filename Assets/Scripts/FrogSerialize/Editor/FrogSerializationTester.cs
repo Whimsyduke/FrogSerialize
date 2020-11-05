@@ -162,6 +162,16 @@ namespace FrogSerialization
 
             #region 测试字段
 
+            #region Null
+
+            /// <summary>
+            /// 空值
+            /// </summary>
+            [FrogSerializable(Comment = "Null")]
+            public string NullVal = null;
+
+            #endregion Null
+
             #region Bool
 
             /// <summary>
@@ -402,17 +412,21 @@ namespace FrogSerialization
             #region Asset
 
             /// <summary>
-            /// UShort默认常量值
+            /// Asset默认常量值
             /// </summary>
             public readonly  Material MaterialValDefault = AssetDatabase.LoadMainAssetAtPath(Const_PathMaterialA) as Material;
 
             /// <summary>
-            /// UShort字段
+            /// Asset字段
             /// </summary>
             [FrogSerializable(Comment = "Asset")]
             public Material MaterialVal = AssetDatabase.LoadMainAssetAtPath(Const_PathMaterialA) as Material;
 
             #endregion Asset
+
+            #region Serializable
+
+            #endregion Serializable
 
             #region 不序列化属性
 
@@ -463,7 +477,7 @@ namespace FrogSerialization
                 ULongVal = (ulong)random.Next(0, int.MaxValue);
                 UShortVal = (ushort)random.Next(ushort.MinValue, ushort.MaxValue);
                 MaterialVal = AssetDatabase.LoadMainAssetAtPath(random.Next(0, 2) == 0? Const_PathMaterialB : Const_PathMaterialC) as Material;
-                NonSerializedInt = random.Next(int.MinValue, int.MaxValue);
+                NonSerializedInt = random.Next(int.MinValue, IntValDefault);
                 ParentField = random.Next(int.MinValue, int.MaxValue);
             }
 

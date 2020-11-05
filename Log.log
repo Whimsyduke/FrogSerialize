@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <TypeList>
+    <TypeInfo Name="Test_ToXml">
+      <Type Type="FrogSerialization.Const_TestEditorTool_Tester+Test_ToXml,Assembly-CSharp-Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    </TypeInfo>
+    <TypeInfo Name="String">
+      <Type Type="System.String,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="Boolean">
+      <Type Type="System.Boolean,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="Byte">
+      <Type Type="System.Byte,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="Char">
+      <Type Type="System.Char,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="Decimal">
+      <Type Type="System.Decimal,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="Double">
+      <Type Type="System.Double,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="EnumTest">
+      <Type Type="FrogSerialization.Const_TestEditorTool_Tester+Test_ToXml+EnumTest,Assembly-CSharp-Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    </TypeInfo>
+    <TypeInfo Name="Single">
+      <Type Type="System.Single,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="Int32">
+      <Type Type="System.Int32,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="Int64">
+      <Type Type="System.Int64,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="SByte">
+      <Type Type="System.SByte,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="Int16">
+      <Type Type="System.Int16,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="UInt32">
+      <Type Type="System.UInt32,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="UInt64">
+      <Type Type="System.UInt64,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="UInt16">
+      <Type Type="System.UInt16,mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    </TypeInfo>
+    <TypeInfo Name="Material">
+      <Type Type="UnityEngine.Material,UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    </TypeInfo>
+  </TypeList>
+  <ObjectList>
+    <Object Type="Test_ToXml">
+      <!--Null-->
+      <NonSerializedField Field="NullVal" Type="String" />
+      <!--Bool-->
+      <NonSerializedField Field="BoolVal" Value="false" Type="Boolean" />
+      <!--Byte-->
+      <NonSerializedField Field="ByteVal" Value="149" Type="Byte" />
+      <!--Char-->
+      <NonSerializedField Field="CharVal" Value="娊" Type="Char" />
+      <!--Decimal-->
+      <NonSerializedField Field="DecimalVal" Value="-282998048" Type="Decimal" />
+      <!--Double-->
+      <NonSerializedField Field="DoubleVal" Value="-1036208086" Type="Double" />
+      <!--Enum-->
+      <NonSerializedField Field="EnumVal" Value="B" Type="EnumTest" />
+      <!--Float-->
+      <NonSerializedField Field="FloatVal" Value="-7.637912E+08" Type="Single" />
+      <!--Int-->
+      <NonSerializedField Field="IntVal" Value="-1118928178" Type="Int32" />
+      <!--Long-->
+      <NonSerializedField Field="LongVal" Value="-1382921055" Type="Int64" />
+      <!--SByte-->
+      <NonSerializedField Field="SByteVal" Value="-25" Type="SByte" />
+      <!--Short-->
+      <NonSerializedField Field="ShortVal" Value="-29481" Type="Int16" />
+      <!--String-->
+      <NonSerializedField Field="StringVal" Value="1069943819" Type="String" />
+      <!--UInt-->
+      <NonSerializedField Field="UIntVal" Value="1885064089" Type="UInt32" />
+      <!--ULong-->
+      <NonSerializedField Field="ULongVal" Value="492031220" Type="UInt64" />
+      <!--UShort-->
+      <NonSerializedField Field="UShortVal" Value="44249" Type="UInt16" />
+      <!--Asset-->
+      <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialC.mat" Type="Material" />
+      <!--Parent Field-->
+      <NonSerializedField Field="ParentField" Value="1628600452" Type="Int32" />
+    </Object>
+  </ObjectList>
+</Document>
