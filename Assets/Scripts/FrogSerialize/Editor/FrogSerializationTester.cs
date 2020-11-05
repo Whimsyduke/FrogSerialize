@@ -435,7 +435,7 @@ namespace FrogSerialization
             /// 可序列化字段
             /// </summary>
             [FrogSerializable(Comment = "Serializable")]
-            public Test_ToXmlBase SerializableVal = new Test_ToXmlOther();
+            public Test_ToXmlBase SerializableVal;
 
             #endregion Serializable
 
@@ -460,6 +460,13 @@ namespace FrogSerialization
 
             #region 构造函数
 
+            /// <summary>
+            /// 构造暗黑少女
+            /// </summary>
+            public Test_ToXml()
+            {
+                SerializableVal = new Test_ToXmlOther(this);
+            }
             #endregion 构造函数
 
             #region 方法
@@ -588,7 +595,7 @@ namespace FrogSerialization
             /// 可序列化字段
             /// </summary>
             [FrogSerializable(Comment = "Self")]
-            public Test_ToXmlOther ThisVal;
+            public Test_ToXml ThisVal;
 
             #endregion Self
 
@@ -621,9 +628,10 @@ namespace FrogSerialization
             /// <summary>
             /// 构造函数
             /// </summary>
-            public Test_ToXmlOther()
+            /// <param name="parent">父级对象</param>
+            public Test_ToXmlOther(Test_ToXml parent)
             {
-               
+                ThisVal = parent;
             }
 
             #endregion 构造函数
@@ -640,7 +648,6 @@ namespace FrogSerialization
                 System.Random random = new System.Random();
                 IntVal = random.Next(int.MinValue, int.MaxValue);
                 ParentField = random.Next(int.MinValue, int.MaxValue);
-                ThisVal = this;
             }
 
             /// <summary>
