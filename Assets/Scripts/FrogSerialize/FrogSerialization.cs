@@ -2985,7 +2985,7 @@ namespace FrogSerialization
         /// <returns>XElement对象</returns>
         private static XElement ToXml_KeyValuePair(XmlWriteHelper helper, object key, object value, int index)
         {
-            helper.PushName(XName.Get(Const_XmlNameOth_Dictionary + Const_XmlNameAtt_Key, index.ToString()));
+            helper.PushName(XName.Get(Const_XmlNameOth_Dictionary + "_" + Const_XmlNameAtt_Key, index.ToString()));
             XComment commentKey = null;
             if (PrintCommentPath)
             {
@@ -2993,7 +2993,7 @@ namespace FrogSerialization
             }
             XElement xmlKey = helper.GetValueXml(key);
             helper.PopName();
-            helper.PushName(XName.Get(Const_XmlNameOth_Dictionary + Const_XmlNameAtt_Value, index.ToString()));
+            helper.PushName(XName.Get(Const_XmlNameOth_Dictionary + "_" + Const_XmlNameAtt_Value, index.ToString()));
             XComment commentValue = null;
             if (PrintCommentPath)
             {
