@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using UnityEngine;
 using UnityEditor;
@@ -569,42 +568,42 @@ namespace FrogSerialization
                 if (listHasTest.Contains(this)) return true;
                 listHasTest.Add(this);
                 if (tester == null) throw new Exception("Null object to test.");
-                if (ParentField != tester.ParentField) throw new Exception($"{nameof(ParentField)} is not equal!");
-                if (BoolVal != tester.BoolVal) throw new Exception($"{nameof(BoolVal)} is not equal!");
-                if (ByteVal != tester.ByteVal) throw new Exception($"{nameof(ByteVal)} is not equal!");
-                if (CharVal != tester.CharVal) throw new Exception($"{nameof(CharVal)} is not equal!");
-                if (DecimalVal != tester.DecimalVal) throw new Exception($"{nameof(DecimalVal)} is not equal!");
-                if (DoubleVal != tester.DoubleVal) throw new Exception($"{nameof(DoubleVal)} is not equal!");
-                if (EnumVal != tester.EnumVal) throw new Exception($"{nameof(EnumVal)} is not equal!");
-                if (FloatVal != tester.FloatVal) throw new Exception($"{nameof(FloatVal)} is not equal!");
-                if (IntVal != tester.IntVal) throw new Exception($"{nameof(IntVal)} is not equal!");
-                if (LongVal != tester.LongVal) throw new Exception($"{nameof(LongVal)} is not equal!");
-                if (SByteVal != tester.SByteVal) throw new Exception($"{nameof(SByteVal)} is not equal!");
-                if (ShortVal != tester.ShortVal) throw new Exception($"{nameof(ShortVal)} is not equal!");
-                if (StringVal != tester.StringVal) throw new Exception($"{nameof(StringVal)} is not equal!");
-                if (UIntVal != tester.UIntVal) throw new Exception($"{nameof(UIntVal)} is not equal!");
-                if (ULongVal != tester.ULongVal) throw new Exception($"{nameof(ULongVal)} is not equal!");
-                if (UShortVal != tester.UShortVal) throw new Exception($"{nameof(UShortVal)} is not equal!");
-                if (MaterialVal.color != tester.MaterialVal.color) throw new Exception($"{nameof(MaterialVal)} is not equal!");
-                if (NonSerializedInt == tester.NonSerializedInt) throw new Exception($"{nameof(NonSerializedInt)} is not equal!");
-                if (!(SerializableVal).ValueEqual(tester.SerializableVal, listHasTest)) throw new Exception($"{nameof(SerializableVal)} is not equal!");
-                if (ArrayVal.Count() != tester.ArrayVal.Count()) throw new Exception($"{nameof(ArrayVal)} count is not equal!");
+                if (ParentField != tester.ParentField) throw new Exception("ParentField is not equal!");
+                if (BoolVal != tester.BoolVal) throw new Exception("BoolVal is not equal!");
+                if (ByteVal != tester.ByteVal) throw new Exception("ByteVal is not equal!");
+                if (CharVal != tester.CharVal) throw new Exception("CharVal is not equal!");
+                if (DecimalVal != tester.DecimalVal) throw new Exception("DecimalVal is not equal!");
+                if (DoubleVal != tester.DoubleVal) throw new Exception("DoubleVal is not equal!");
+                if (EnumVal != tester.EnumVal) throw new Exception("EnumVal is not equal!");
+                if (FloatVal != tester.FloatVal) throw new Exception("FloatVal is not equal!");
+                if (IntVal != tester.IntVal) throw new Exception("IntVal is not equal!");
+                if (LongVal != tester.LongVal) throw new Exception("LongVal is not equal!");
+                if (SByteVal != tester.SByteVal) throw new Exception("SByteVal is not equal!");
+                if (ShortVal != tester.ShortVal) throw new Exception("ShortVal is not equal!");
+                if (StringVal != tester.StringVal) throw new Exception("StringVal is not equal!");
+                if (UIntVal != tester.UIntVal) throw new Exception("UIntVal is not equal!");
+                if (ULongVal != tester.ULongVal) throw new Exception("ULongVal is not equal!");
+                if (UShortVal != tester.UShortVal) throw new Exception("UShortVal is not equal!");
+                if (MaterialVal.color != tester.MaterialVal.color) throw new Exception("MaterialVal is not equal!");
+                if (NonSerializedInt == tester.NonSerializedInt) throw new Exception("NonSerializedInt is not equal!");
+                if (!(SerializableVal).ValueEqual(tester.SerializableVal, listHasTest)) throw new Exception("SerializableVal is not equal!");
+                if (ArrayVal.Count() != tester.ArrayVal.Count()) throw new Exception("ArrayVal count is not equal!");
                 for (int i = 0; i < ArrayVal.Count(); i++)
                 {
                     if (!ArrayVal[i].ValueEqual(tester.ArrayVal[i], listHasTest))
-                        throw new Exception($"{nameof(ArrayVal)}[{i}] count is not equal!");
+                        throw new Exception("ArrayVal is not equal!");
                 }
-                if (ListVal.Count != tester.ListVal.Count) throw new Exception($"{nameof(ListVal)} count is not equal!");
+                if (ListVal.Count != tester.ListVal.Count) throw new Exception("ListVal count is not equal!");
                 for (int i = 0; i < ListVal.Count; i++)
                 {
                     if (!ListVal[i].ValueEqual(tester.ListVal[i], listHasTest)) 
-                        throw new Exception($"{nameof(ListVal)}[{i}] count is not equal!");
+                        throw new Exception("ListVal" + i + " count is not equal!");
                 }
-                if (DictionaryVal.Count != tester.DictionaryVal.Count) throw new Exception($"{nameof(DictionaryVal)} count is not equal!");
+                if (DictionaryVal.Count != tester.DictionaryVal.Count) throw new Exception("DictionaryVal count is not equal!");
                 for (int i = 0; i < DictionaryVal.Count; i++)
                 {
                     if (!DictionaryVal[i].ValueEqual(tester.DictionaryVal[i], listHasTest))
-                        throw new Exception($"{nameof(DictionaryVal)}[{i}] count is not equal!");
+                        throw new Exception("DictionaryVal" + i + " count is not equal!");
                 }
                 return true;
             }
@@ -762,9 +761,9 @@ namespace FrogSerialization
             {
                 if (listHasTest.Contains(this)) return true;
                 listHasTest.Add(this);
-                if (IntVal != tester.IntVal) throw new Exception($"{nameof(IntVal)} is not equal!");
-                if (ParentField != tester.ParentField) throw new Exception($"{nameof(ParentField)} is not equal!");
-                if (OtherVal != null && !OtherVal.ValueEqual(tester.OtherVal, listHasTest)) throw new Exception($"{nameof(OtherVal)} is not equal!");
+                if (IntVal != tester.IntVal) throw new Exception("IntVa is not equal!");
+                if (ParentField != tester.ParentField) throw new Exception("ParentField is not equal!");
+                if (OtherVal != null && !OtherVal.ValueEqual(tester.OtherVal, listHasTest)) throw new Exception("OtherVal is not equal!");
                 return true;
             }
 
@@ -823,14 +822,22 @@ namespace FrogSerialization
         [MenuItem("蛤序列化系统/自测试", false, 1)]
         public static void TestSystem()
         {
-            Test_ToXml tester = new Test_ToXml();
-            tester.Name = "A";
-            tester.SerializableVal.OtherVal = new Test_ToXml();
-            tester.SerializableVal.OtherVal.Name = "B";
-            tester.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml();
-            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.Name = "C";
-            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml();
-            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal.Name = "D";
+            Test_ToXml tester = new Test_ToXml
+            {
+                Name = "A"
+            };
+            tester.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "B"
+            };
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "C"
+            };
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "D"
+            };
             tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = tester.SerializableVal.OtherVal;
             tester.RandomField();
             XElement element = FrogSerialization.Serialize(tester);

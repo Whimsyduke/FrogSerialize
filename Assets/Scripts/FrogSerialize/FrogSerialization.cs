@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using UnityEngine;
 using UnityEditor;
@@ -86,12 +85,12 @@ namespace FrogSerialization
         /// <summary>
         /// 无元素类型数组
         /// </summary>
-        public static readonly Type[] Const_NoElementTypeArray = Array.Empty<Type>();
+        public static readonly Type[] Const_NoElementTypeArray = new Type[] { };
 
         /// <summary>
         /// 无元素object数组
         /// </summary>
-        public static readonly object[] Const_NoElementObjectArray = Array.Empty<object>();
+        public static readonly object[] Const_NoElementObjectArray = new object[] { };
 
         #endregion 公共默认参数
 
@@ -119,6 +118,288 @@ namespace FrogSerialization
         #endregion 枚举
 
         #region 定义
+
+        #region 数据结构体
+
+        /// <summary>
+        /// Xml类型信息
+        /// </summary>
+        private struct XmlTypeInfo
+        {
+            #region 内部声明
+
+            #region 常量
+
+            #endregion 常量
+
+            #region 枚举
+
+            #endregion 枚举
+
+            #region 定义
+
+            #endregion 定义
+
+            #region 委托
+
+            #endregion 委托
+
+            #endregion 内部声明
+
+            #region 属性字段
+
+            #region 静态属性
+
+            #endregion 静态属性
+
+            #region 属性
+
+            /// <summary>
+            /// 名称
+            /// </summary>
+            public string Name { set; get; }
+
+            /// <summary>
+            /// 类型
+            /// </summary>
+            public Type Type { set; get; }
+
+            #endregion 属性
+
+            #region 字段
+
+            #endregion 字段
+
+            #region 事件
+
+            #endregion 事件
+
+            #endregion 属性字段
+
+            #region 构造函数
+
+            /// <summary>
+            /// 构造函数
+            /// </summary>
+            /// <param name="name">名称</param>
+            /// <param name="type">类型</param>
+            public XmlTypeInfo(string name, Type type)
+            {
+                Name = name;
+                Type = type;
+            }
+
+            #endregion 构造函数
+
+            #region 方法
+
+            #region 通用方法
+
+            #endregion 通用方法
+
+            #region 重写方法
+
+            #endregion 重写方法
+
+            #region 事件方法
+
+            #endregion 事件方法 
+
+            #endregion 方法
+
+        }
+
+        /// <summary>
+        /// 序列化方法
+        /// </summary>
+        private struct SerializationMethod
+        {
+            #region 内部声明
+
+            #region 常量
+
+            #endregion 常量
+
+            #region 枚举
+
+            #endregion 枚举
+
+            #region 定义
+
+            #endregion 定义
+
+            #region 委托
+
+            #endregion 委托
+
+            #endregion 内部声明
+
+            #region 属性字段
+
+            #region 静态属性
+
+            #endregion 静态属性
+
+            #region 属性
+
+            /// <summary>
+            /// 值类型
+            /// </summary>
+            public Type ValueType { set; get; }
+
+            /// <summary>
+            /// 序列化函数委托
+            /// </summary>
+            public Delegate_SerializeField SerializeFunc { set; get; }
+
+            /// <summary>
+            /// 反序列化函数委托
+            /// </summary>
+            public Delegate_DeserializeField DeserializeFunc { set; get; }
+
+            /// <summary>
+            /// 基本类型获取函数委托
+            /// </summary>
+            public Delegate_GetBaseType BaseTypeFunc { set; get; }
+
+            #endregion 属性
+
+            #region 字段
+
+            #endregion 字段
+
+            #region 事件
+
+            #endregion 事件
+
+            #endregion 属性字段
+
+            #region 构造函数
+
+            /// <summary>
+            /// 构造函数
+            /// </summary>
+            /// <param name="valueType">值类型</param>
+            /// <param name="serializeFunc">序列化函数委托</param>
+            /// <param name="deserializeFunc">反序列化函数委托</param>
+            /// <param name="baseTypeFunc">基本类型获取函数委托</param>
+            public SerializationMethod(Type valueType, Delegate_SerializeField serializeFunc, Delegate_DeserializeField deserializeFunc, Delegate_GetBaseType baseTypeFunc)
+            {
+                ValueType = valueType;
+                SerializeFunc = serializeFunc;
+                DeserializeFunc = deserializeFunc;
+                BaseTypeFunc = baseTypeFunc;
+            }
+
+            #endregion 构造函数
+
+            #region 方法
+
+            #region 通用方法
+
+            #endregion 通用方法
+
+            #region 重写方法
+
+            #endregion 重写方法
+
+            #region 事件方法
+
+            #endregion 事件方法 
+
+            #endregion 方法
+
+        }
+
+        /// <summary>
+        /// 特性配置字段信息
+        /// </summary>
+        private struct FieldAttributeInfo
+        {
+            #region 内部声明
+
+            #region 常量
+
+            #endregion 常量
+
+            #region 枚举
+
+            #endregion 枚举
+
+            #region 定义
+
+            #endregion 定义
+
+            #region 委托
+
+            #endregion 委托
+
+            #endregion 内部声明
+
+            #region 属性字段
+
+            #region 静态属性
+
+            #endregion 静态属性
+
+            #region 属性
+
+            /// <summary>
+            /// 字段信息
+            /// </summary>
+            public FieldInfo Field { set; get; }
+
+            /// <summary>
+            /// 注释内容
+            /// </summary>
+            public string Comment { set; get; }
+
+            #endregion 属性
+
+            #region 字段
+
+            #endregion 字段
+
+            #region 事件
+
+            #endregion 事件
+
+            #endregion 属性字段
+
+            #region 构造函数
+
+            /// <summary>
+            /// 构造函数
+            /// </summary>
+            /// <param name="field">字段信息</param>
+            /// <param name="comment">注释内容</param>
+            public FieldAttributeInfo(FieldInfo field, string comment)
+            {
+                Field = field;
+                Comment = comment;
+            }
+
+            #endregion 构造函数
+
+            #region 方法
+
+            #region 通用方法
+
+            #endregion 通用方法
+
+            #region 重写方法
+
+            #endregion 重写方法
+
+            #region 事件方法
+
+            #endregion 事件方法 
+
+            #endregion 方法
+
+        }
+
+        #endregion 数据结构体
 
         #region XML转换助手
 
@@ -155,9 +436,9 @@ namespace FrogSerialization
             /// <summary>
             /// 当前路径列表
             /// </summary>
-            public Stack<string> StackCurrentPath { get; } = new Stack<string>();
+            public Stack<string> StackCurrentPath { private set;  get; }
 
-            public Dictionary<Type, IDictionary<string, (FieldInfo Field, string Comment)>> DictSerializeFieldForType { get; } = new Dictionary<Type, IDictionary<string, (FieldInfo Field, string Comment)>>();
+            public Dictionary<Type, IDictionary<string, FieldAttributeInfo>> DictSerializeFieldForType { private set;  get; }
 
             #endregion 属性
 
@@ -174,7 +455,9 @@ namespace FrogSerialization
             /// </summary>
             public XmalHelper()
             {
+                StackCurrentPath = new Stack<string>();
                 StackCurrentPath.Push("-");
+                DictSerializeFieldForType = new Dictionary<Type, IDictionary<string, FieldAttributeInfo>>();
 #if SDP_HELPER_LOG
             ListLog.AppendLine("================================");
 #endif //SDP_HELPER_LOG
@@ -206,9 +489,9 @@ namespace FrogSerialization
             public void PushName(XName name)
             {
 #if SDP_HELPER_LOG
-            ListLog.AppendLine($"{StackCurrentPath.Peek()}/{name}");
+            ListLog.AppendLine(StackCurrentPath.Peek() + "/" + name);
 #endif //SDP_HELPER_LOG
-                StackCurrentPath.Push($"{StackCurrentPath.Peek()}/{name}");
+                StackCurrentPath.Push(StackCurrentPath.Peek() + "/" + name);
             }
 
             /// <summary>
@@ -259,6 +542,93 @@ namespace FrogSerialization
 
             #region 定义
 
+            /// <summary>
+            /// 字典类型信息
+            /// </summary>
+            struct DictTypeInfo
+            {
+                #region 内部声明
+
+                #region 常量
+
+                #endregion 常量
+
+                #region 枚举
+
+                #endregion 枚举
+
+                #region 定义
+
+                #endregion 定义
+
+                #region 委托
+
+                #endregion 委托
+
+                #endregion 内部声明
+
+                #region 属性字段
+
+                #region 静态属性
+
+                #endregion 静态属性
+
+                #region 属性
+                /// <summary>
+                /// 名称
+                /// </summary>
+                public string Name { set; get; }
+
+                /// <summary>
+                /// 定义
+                /// </summary>
+                public bool IsDefinition { set; get; }
+
+                #endregion 属性
+
+                #region 字段
+
+                #endregion 字段
+
+                #region 事件
+
+                #endregion 事件
+
+                #endregion 属性字段
+
+                #region 构造函数
+
+                /// <summary>
+                /// 构造函数
+                /// </summary>
+                /// <param name="name"></param>
+                /// <param name="isDefinition"></param>
+                public DictTypeInfo(string name, bool isDefinition)
+                {
+                    Name = name;
+                    IsDefinition = isDefinition;
+                }
+
+                #endregion 构造函数
+
+                #region 方法
+
+                #region 通用方法
+
+                #endregion 通用方法
+
+                #region 重写方法
+
+                #endregion 重写方法
+
+                #region 事件方法
+
+                #endregion 事件方法 
+
+                #endregion 方法
+
+            }
+
             #endregion 定义
 
             #region 委托
@@ -287,7 +657,7 @@ namespace FrogSerialization
             /// <summary>
             /// 类型字典
             /// </summary>
-            private readonly Dictionary<Type, (string Name, bool IsDefinition)> mDictType = new Dictionary<Type, (string Name, bool IsDefinition)>();
+            private readonly Dictionary<Type, DictTypeInfo> mDictType = new Dictionary<Type, DictTypeInfo>();
 
             #endregion 字段
 
@@ -350,7 +720,8 @@ namespace FrogSerialization
                 int index = 0;
                 while (mDictType.Count(R => R.Value.Name == name) != 0)
                 {
-                    name = $"{baseName}#{++index}";
+                    index++;
+                    name = baseName + "#" + index;
                 }
                 return name;
             }
@@ -366,7 +737,7 @@ namespace FrogSerialization
                 {
                     if (type.IsGenericTypeDefinition)
                     {
-                        mDictType.Add(type, (GetSimpleName(type), true));
+                        mDictType.Add(type, new DictTypeInfo(GetSimpleName(type), true));
                     }
                     else if (type.IsGenericType)
                     {
@@ -389,11 +760,11 @@ namespace FrogSerialization
                             builder.Append(GetTypeName(select));
                         }
                         builder.Append("]");
-                        mDictType.Add(type, (builder.ToString(), false));
+                        mDictType.Add(type, new DictTypeInfo(builder.ToString(), false));
                     }
                     else
                     {
-                        mDictType.Add(type, (GetSimpleName(type), false));
+                        mDictType.Add(type, new DictTypeInfo(GetSimpleName(type), false));
                     }
                 }
                 return mDictType[type].Name;
@@ -557,10 +928,10 @@ namespace FrogSerialization
             /// <param name="xml"></param>
             public void InitTypeList(XElement xml)
             {
-                IEnumerable<XElement> elements = FrogSerialization.GetXElements(xml, FrogSerialization.Const_XmlNameEle_TypeInfo);
+                IEnumerable<XElement> elements = GetXElements(xml, Const_XmlNameEle_TypeInfo);
                 foreach (XElement select in elements)
                 {
-                    (string Name, Type Type) info = FrogSerialization.FromXml_TypeInfo(select);
+                    XmlTypeInfo info = FromXml_TypeInfo(select);
                     mDictType.Add(info.Name, info.Type);
                 }
             }
@@ -626,12 +997,12 @@ namespace FrogSerialization
         /// <summary>
         /// 打印路径注释
         /// </summary>
-        public static bool PrintCommentPath { set; get; } = false;
+        public static bool PrintCommentPath { set; get; }
 
         /// <summary>
         /// 打印自定义注释
         /// </summary>
-        public static bool PrintCustomPath { set; get; } = true;
+        public static bool PrintCustomPath { set; get; }
 
         #endregion 属性
 
@@ -640,28 +1011,28 @@ namespace FrogSerialization
         /// <summary>
         /// 基本类型序列化方法
         /// </summary>
-        private static readonly Dictionary<Type, (Type ValueType, Delegate_SerializeField SerializeFunc, Delegate_DeserializeField DeserializeFunc, Delegate_GetBaseType BaseTypeFunc)> mListSerializeFunc =
-            new Dictionary<Type, (Type ValueType, Delegate_SerializeField SerializeFunc, Delegate_DeserializeField DeserializeFunc, Delegate_GetBaseType BaseTypeFunc)>()
+        private static readonly Dictionary<Type, SerializationMethod> mListSerializeFunc =
+            new Dictionary<Type, SerializationMethod>()
             {
-                { typeof(bool), (typeof(bool), ToXml_Bool, FromXml_Bool, Type_GetBaseBool) },
-                { typeof(byte), (typeof(byte), ToXml_Byte, FromXml_Byte, Type_GetBaseByte) },
-                { typeof(char), (typeof(char), ToXml_Char, FromXml_Char, Type_GetBaseChar) },
-                { typeof(decimal), (typeof(decimal), ToXml_Decimal, FromXml_Decimal, Type_GetBaseDecimal) },
-                { typeof(double), (typeof(double), ToXml_Double, FromXml_Double, Type_GetBaseDouble) },
-                { typeof(Enum), (typeof(Enum), ToXml_Enum, FromXml_Enum, Type_GetBaseEnum) },
-                { typeof(float), (typeof(float), ToXml_Float, FromXml_Float, Type_GetBaseFloat) },
-                { typeof(int), (typeof(int), ToXml_Int, FromXml_Int, Type_GetBaseInt) },
-                { typeof(long), (typeof(long), ToXml_Long, FromXml_Long, Type_GetBaseLong) },
-                { typeof(sbyte), (typeof(sbyte), ToXml_SByte, FromXml_SByte, Type_GetBaseSByte) },
-                { typeof(short), (typeof(short), ToXml_Short, FromXml_Short, Type_GetBaseShort) },
-                { typeof(string), (typeof(string), ToXml_String, FromXml_String, Type_GetBaseString) },
-                { typeof(uint), (typeof(uint), ToXml_UInt, FromXml_UInt, Type_GetBaseUInt) },
-                { typeof(ulong), (typeof(ulong), ToXml_ULong, FromXml_ULong, Type_GetBaseULong) },
-                { typeof(ushort), (typeof(ushort), ToXml_UShort, FromXml_UShort, Type_GetBaseUShort) },
-                { typeof(UnityEngine.Object), (typeof(UnityEngine.Object), ToXml_Asset, FromXml_Asset, Type_GetBaseAsset) },
-                { typeof(Array), (typeof(Array), ToXml_Array, FromXml_Array, Type_GetBaseArray) },
-                { typeof(IList), (typeof(IList), ToXml_List, FromXml_List, Type_GetBaseList) },
-                { typeof(IDictionary), (typeof(IDictionary), ToXml_Dictionary, FromXml_Dictionary, Type_GetBaseDictionary) },
+                { typeof(bool), new SerializationMethod(typeof(bool), ToXml_Bool, FromXml_Bool, Type_GetBaseBool) },
+                { typeof(byte), new SerializationMethod(typeof(byte), ToXml_Byte, FromXml_Byte, Type_GetBaseByte) },
+                { typeof(char), new SerializationMethod(typeof(char), ToXml_Char, FromXml_Char, Type_GetBaseChar) },
+                { typeof(decimal), new SerializationMethod(typeof(decimal), ToXml_Decimal, FromXml_Decimal, Type_GetBaseDecimal) },
+                { typeof(double), new SerializationMethod(typeof(double), ToXml_Double, FromXml_Double, Type_GetBaseDouble) },
+                { typeof(Enum), new SerializationMethod(typeof(Enum), ToXml_Enum, FromXml_Enum, Type_GetBaseEnum) },
+                { typeof(float), new SerializationMethod(typeof(float), ToXml_Float, FromXml_Float, Type_GetBaseFloat) },
+                { typeof(int), new SerializationMethod(typeof(int), ToXml_Int, FromXml_Int, Type_GetBaseInt) },
+                { typeof(long), new SerializationMethod(typeof(long), ToXml_Long, FromXml_Long, Type_GetBaseLong) },
+                { typeof(sbyte), new SerializationMethod(typeof(sbyte), ToXml_SByte, FromXml_SByte, Type_GetBaseSByte) },
+                { typeof(short), new SerializationMethod(typeof(short), ToXml_Short, FromXml_Short, Type_GetBaseShort) },
+                { typeof(string), new SerializationMethod(typeof(string), ToXml_String, FromXml_String, Type_GetBaseString) },
+                { typeof(uint), new SerializationMethod(typeof(uint), ToXml_UInt, FromXml_UInt, Type_GetBaseUInt) },
+                { typeof(ulong), new SerializationMethod(typeof(ulong), ToXml_ULong, FromXml_ULong, Type_GetBaseULong) },
+                { typeof(ushort), new SerializationMethod(typeof(ushort), ToXml_UShort, FromXml_UShort, Type_GetBaseUShort) },
+                { typeof(UnityEngine.Object), new SerializationMethod(typeof(UnityEngine.Object), ToXml_Asset, FromXml_Asset, Type_GetBaseAsset) },
+                { typeof(Array), new SerializationMethod(typeof(Array), ToXml_Array, FromXml_Array, Type_GetBaseArray) },
+                { typeof(IList), new SerializationMethod(typeof(IList), ToXml_List, FromXml_List, Type_GetBaseList) },
+                { typeof(IDictionary), new SerializationMethod(typeof(IDictionary), ToXml_Dictionary, FromXml_Dictionary, Type_GetBaseDictionary) },
             };
 
         #endregion 字段
@@ -673,6 +1044,15 @@ namespace FrogSerialization
         #endregion 属性字段
 
         #region 构造函数
+
+        /// <summary>
+        /// 静态构造函数
+        /// </summary>
+        static FrogSerialization()
+        {
+            PrintCommentPath = false;
+            PrintCustomPath = true;
+        }
 
         #endregion 构造函数
 
@@ -779,18 +1159,18 @@ namespace FrogSerialization
                     {
                         helper.DictSerializeFieldForType.Add(type, GetSerializableFields(type));
                     }
-                    IDictionary<string, (FieldInfo Field, string Comment)> dict = helper.DictSerializeFieldForType[type];
+                    IDictionary<string, FieldAttributeInfo> dict = helper.DictSerializeFieldForType[type];
                     foreach (var item in dict)
                     {
                         helper.PushName(item.Value.Field.Name);
                         if (PrintCommentPath)
                         {
-                            XComment comment = new XComment($"路径：{helper.PeekName()}");
+                            XComment comment = new XComment("路径：" + helper.PeekName());
                             element.Add(comment);
                         }
                         if (PrintCustomPath)
                         {
-                            XComment comment = new XComment($"注释：{item.Value.Comment}");
+                            XComment comment = new XComment("注释：" + item.Value.Comment); 
                             element.Add(comment);
                         }
                         object obj = item.Value.Field.GetValue(val);
@@ -846,7 +1226,7 @@ namespace FrogSerialization
                 {
                     helper.DictSerializeFieldForType.Add(objType, GetSerializableFields(objType));
                 }
-                IDictionary<string, (FieldInfo Field, string Comment)> dict = helper.DictSerializeFieldForType[objType];
+                IDictionary<string, FieldAttributeInfo> dict = helper.DictSerializeFieldForType[objType];
                 IEnumerable<XElement> fieldXml = GetXElements(xml, Const_XmlNameEle_NonSerializedField);
                 foreach (XElement field in fieldXml)
                 {
@@ -904,16 +1284,16 @@ namespace FrogSerialization
         /// </summary>
         /// <param name="type">处理类型</param>
         /// <returns>处理结果</returns>
-        public static IDictionary<string, (FieldInfo Field, string Comment)> GetSerializableFields(Type type)
+        private static IDictionary<string, FieldAttributeInfo> GetSerializableFields(Type type)
         {
             List<FieldInfo> fields = type.GetFields().ToList().Where(r => r.IsDefined(typeof(FrogSerializableAttribute), true)).ToList();
-            Dictionary<string, (FieldInfo Field, string Comment)> dict = new Dictionary<string, (FieldInfo Field, string Comment)>();
+            Dictionary<string, FieldAttributeInfo> dict = new Dictionary<string, FieldAttributeInfo>();
             foreach (FieldInfo field in fields)
             {
                 List<FrogSerializableAttribute> atts = field.GetCustomAttributes(true).Where(r => r.GetType() == typeof(FrogSerializableAttribute)).Cast<FrogSerializableAttribute>().ToList();
                 if (atts.Count == 0) continue;
                 FrogSerializableAttribute att = atts.First();
-                dict.Add(field.Name, (field, att.Comment));
+                dict.Add(field.Name, new FieldAttributeInfo(field, att.Comment));
             }
             return dict;
         }
@@ -1553,7 +1933,7 @@ namespace FrogSerialization
                 string fieldName = fieldAtt.Value;
                 FieldInfo field = val.GetType().GetField(fieldName);
                 XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value, true, true);
-                field.SetValue(val, valAtt?.Value);
+                field.SetValue(val, valAtt== null ?null :valAtt.Value);
             }
             else
             {
@@ -1754,10 +2134,11 @@ namespace FrogSerialization
                    ToXml_TypeSimple(helper, field != null ? field.FieldType : val.GetType())
                    );
             }
-            if (!(val is UnityEngine.Object obj))
+            if (!(val is UnityEngine.Object))
             {
                 throw new Exception("错误的资源类型");
             }
+            UnityEngine.Object obj = val as UnityEngine.Object;
             string path = AssetDatabase.GetAssetPath(obj);
             return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
                 field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
@@ -1835,10 +2216,11 @@ namespace FrogSerialization
                     ToXml_TypeSimple(helper, field != null ? field.FieldType : val.GetType())
                     );
             }
-            if (!(val is Array array))
+            if (!(val is Array))
             {
                 throw new Exception("错误的Array类型");
             }
+            Array array = val as Array;
             XElement element = ToXml_Object(helper, val);
             XAttribute countAtt = GenerateXAttribute(Const_XmlNameAtt_Count, array.Length);
             element.Add(countAtt);
@@ -1849,7 +2231,7 @@ namespace FrogSerialization
                 helper.PushName(name);
                 if (PrintCommentPath)
                 {
-                    XComment comment = new XComment($"路径：{helper.PeekName()}");
+                    XComment comment = new XComment("路径：" + helper.PeekName());
                     element.Add(comment);
                 }
                 element.Add(helper.GetValueXml(child));
@@ -1944,10 +2326,11 @@ namespace FrogSerialization
                     ToXml_TypeSimple(helper, field != null ? field.FieldType : val.GetType())
                     );
             }
-            if (!(val is IList list))
+            if (!(val is IList))
             {
                 throw new Exception("错误的List类型");
             }
+            IList list = val as IList;
             XElement element = ToXml_Object(helper, val);
             int index = 1;
             foreach (object child in list)
@@ -1956,7 +2339,7 @@ namespace FrogSerialization
                 helper.PushName(name);
                 if (PrintCommentPath)
                 {
-                    XComment comment = new XComment($"路径：{helper.PeekName()}");
+                    XComment comment = new XComment("路径：" + helper.PeekName());
                     element.Add(comment);
                 }
                 element.Add(helper.GetValueXml(child));
@@ -2052,10 +2435,11 @@ namespace FrogSerialization
                     ToXml_TypeSimple(helper, field != null ? field.FieldType : val.GetType())
                     );
             }
-            if (!(val is IDictionary dict))
+            if (!(val is IDictionary))
             {
                 throw new Exception("错误的List类型");
             }
+            IDictionary dict = val as IDictionary;
             XElement element = ToXml_Object(helper, val);
             int index = 1;
             foreach (DictionaryEntry select in dict)
@@ -2143,7 +2527,7 @@ namespace FrogSerialization
         /// <returns>全称</returns>
         private static string TypeFullNameWithAssembly(Type type)
         {
-            return $"{type.FullName},{type.Assembly.FullName}";
+            return type.FullName + "," + type.Assembly.FullName;
         }
 
         #endregion 反射相关
@@ -2514,7 +2898,7 @@ namespace FrogSerialization
             CheckXelementName(xml, Const_XmlNameEle_Object);
             XAttribute typeXML = GetXAttribute(xml, Const_XmlNameAtt_Type);
             Type type = FromXml_TypeSimple(helper, typeXML);
-            return Activator.CreateInstance(type, args == null ? Const_NoElementObjectArray : args);
+            return Activator.CreateInstance(type, args ?? Const_NoElementObjectArray);
         }
 
         #endregion Object
@@ -2579,12 +2963,12 @@ namespace FrogSerialization
         /// </summary>
         /// <param name="xml">文档Xml</param>
         /// <returns>类型信息</returns>
-        private static (string Name, Type Type) FromXml_TypeInfo(XElement xml)
+        private static XmlTypeInfo FromXml_TypeInfo(XElement xml)
         {
             XAttribute nameAtt = GetXAttribute(xml, Const_XmlNameAtt_Name);
             XElement typeXml = GetXElement(xml, Const_XmlNameEle_Type);
             Type type = FromXml_Type(typeXml);
-            return (nameAtt.Value, type);
+            return new XmlTypeInfo(nameAtt.Value, type);
         }
 
         #endregion Document
@@ -2601,19 +2985,19 @@ namespace FrogSerialization
         /// <returns>XElement对象</returns>
         private static XElement ToXml_KeyValuePair(XmlWriteHelper helper, object key, object value, int index)
         {
-            helper.PushName(XName.Get($"{Const_XmlNameOth_Dictionary}_{Const_XmlNameAtt_Key}", index.ToString()));
+            helper.PushName(XName.Get(Const_XmlNameOth_Dictionary + Const_XmlNameAtt_Key, index.ToString()));
             XComment commentKey = null;
             if (PrintCommentPath)
             {
-                commentKey = new XComment($"路径：{helper.PeekName()}");
+                commentKey = new XComment("路径：" + helper.PeekName());
             }
             XElement xmlKey = helper.GetValueXml(key);
             helper.PopName();
-            helper.PushName(XName.Get($"{Const_XmlNameOth_Dictionary}_{Const_XmlNameAtt_Value}", index.ToString()));
+            helper.PushName(XName.Get(Const_XmlNameOth_Dictionary + Const_XmlNameAtt_Value, index.ToString()));
             XComment commentValue = null;
             if (PrintCommentPath)
             {
-                commentValue = new XComment($"路径：{helper.PeekName()}");
+                commentValue = new XComment("路径：" + helper.PeekName());
             }
             XElement xmlValue = helper.GetValueXml(value);
             helper.PopName();
@@ -2643,7 +3027,7 @@ namespace FrogSerialization
                 throw new Exception("Key中数据数量异常");
             }
             key = GetOnlyValue(key);
-            helper.PushName(XName.Get($"{Const_XmlNameOth_Dictionary}_{Const_XmlNameAtt_Key}", index.ToString()));
+            helper.PushName(XName.Get(Const_XmlNameOth_Dictionary + "_" + Const_XmlNameAtt_Key, index.ToString()));
             object keyObj = null;
             helper.GetXmlValue(key, ref keyObj);
             helper.PopName();
@@ -2653,7 +3037,7 @@ namespace FrogSerialization
                 throw new Exception("Value中数据数量异常");
             }
             value = GetOnlyValue(value);
-            helper.PushName(XName.Get($"{Const_XmlNameOth_Dictionary}_{Const_XmlNameAtt_Value}", index.ToString()));
+            helper.PushName(XName.Get(Const_XmlNameOth_Dictionary + "_" + Const_XmlNameAtt_Value, index.ToString()));
             object valueObj = null;
             helper.GetXmlValue(value, ref valueObj);
             helper.PopName();
