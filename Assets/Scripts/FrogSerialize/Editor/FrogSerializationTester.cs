@@ -88,6 +88,11 @@ namespace FrogSerialization
             [FrogSerializable(Comment = "Parent Field")]
             public int ParentField = Test_ToXml.IntValDefault;
 
+            /// <summary>
+            /// 已随机
+            /// </summary>
+            public bool HasRandom = false;
+
             #endregion 字段
 
             #region 事件
@@ -166,6 +171,26 @@ namespace FrogSerialization
             #region 字段
 
             #region 测试字段
+
+            #region List
+
+            /// <summary>
+            /// 列表Val
+            /// </summary>
+            [FrogSerializable(Comment = "List")]
+            public List<Test_ToXmlOther> ListVal = new List<Test_ToXmlOther>();
+
+            #endregion List
+
+            #region Name
+
+            /// <summary>
+            /// 标记类的名称的字段
+            /// </summary>
+            [FrogSerializable(Comment = "Name")]
+            public string Name;
+
+            #endregion Name
 
             #region Null
 
@@ -435,7 +460,7 @@ namespace FrogSerialization
             /// 可序列化字段
             /// </summary>
             [FrogSerializable(Comment = "Serializable")]
-            public Test_ToXmlBase SerializableVal;
+            public Test_ToXmlOther SerializableVal = new Test_ToXmlOther();
 
             #endregion Serializable
 
@@ -460,13 +485,6 @@ namespace FrogSerialization
 
             #region 构造函数
 
-            /// <summary>
-            /// 构造暗黑少女
-            /// </summary>
-            public Test_ToXml()
-            {
-                SerializableVal = new Test_ToXmlOther(this);
-            }
             #endregion 构造函数
 
             #region 方法
@@ -478,6 +496,8 @@ namespace FrogSerialization
             /// </summary>
             public override void RandomField()
             {
+                if (HasRandom) return;
+                HasRandom = true;
                 System.Random random = new System.Random();
                 ParentField = random.Next(int.MinValue, int.MaxValue);
                 BoolVal = random.Next(0,2) == 0;
@@ -498,15 +518,24 @@ namespace FrogSerialization
                 MaterialVal = AssetDatabase.LoadMainAssetAtPath(random.Next(0, 2) == 0? Const_PathMaterialB : Const_PathMaterialC) as Material;
                 NonSerializedInt = random.Next(int.MinValue, IntValDefault);
                 SerializableVal.RandomField();
+                for (int i = 0; i < random.Next(2, 6); i++)
+                {
+                    ListVal.Add(new Test_ToXmlOther());
+                    ListVal[i].RandomField();
+                }
             }
 
             /// <summary>
             /// 数据相同验证
             /// </summary>
             /// <param name="tester">测试对象</param>
+            /// <param name="listHasTest">已测试对象</param>
             /// <returns>测试结果</returns>
-            public bool ValueEqual(Test_ToXml tester)
+            public bool ValueEqual(Test_ToXml tester, List<Test_ToXmlBase> listHasTest)
             {
+                if (listHasTest.Contains(this)) return true;
+                listHasTest.Add(this);
+                if (tester == null) throw new Exception("Null object to test.");
                 if (ParentField != tester.ParentField) throw new Exception($"{nameof(ParentField)} is not equal!");
                 if (BoolVal != tester.BoolVal) throw new Exception($"{nameof(BoolVal)} is not equal!");
                 if (ByteVal != tester.ByteVal) throw new Exception($"{nameof(ByteVal)} is not equal!");
@@ -525,7 +554,13 @@ namespace FrogSerialization
                 if (UShortVal != tester.UShortVal) throw new Exception($"{nameof(UShortVal)} is not equal!");
                 if (MaterialVal.color != tester.MaterialVal.color) throw new Exception($"{nameof(MaterialVal)} is not equal!");
                 if (NonSerializedInt == tester.NonSerializedInt) throw new Exception($"{nameof(NonSerializedInt)} is not equal!");
-                if (!(SerializableVal as Test_ToXmlOther).ValueEqual(tester.SerializableVal as Test_ToXmlOther)) throw new Exception($"{nameof(SerializableVal)} is not equal!");
+                if (!(SerializableVal).ValueEqual(tester.SerializableVal, listHasTest)) throw new Exception($"{nameof(SerializableVal)} is not equal!");
+                if (ListVal.Count != tester.ListVal.Count) throw new Exception($"{nameof(ListVal)} count is not equal!");
+                for (int i = 0; i < ListVal.Count; i++)
+                {
+                    if (!ListVal[i].ValueEqual(tester.ListVal[i], listHasTest)) 
+                        throw new Exception($"{nameof(ListVal)}[{i}] count is not equal!");
+                }
                 return true;
             }
 
@@ -589,16 +624,35 @@ namespace FrogSerialization
 
             #endregion SerializableNull
 
-            #region Self
+            #region Other
 
             /// <summary>
-            /// 可序列化字段
+            /// 其它可序列化字段
             /// </summary>
-            [FrogSerializable(Comment = "Self")]
-            public Test_ToXml ThisVal;
+            [FrogSerializable(Comment = "Other")]
+            public Test_ToXml OtherVal;
 
-            #endregion Self
+            #endregion Other
 
+            #region This
+
+            /// <summary>
+            /// 自身
+            /// </summary>
+            [FrogSerializable(Comment = "This")]
+            public Test_ToXmlOther ThisVal;
+
+            #endregion This
+
+            #region Inherit
+
+            /// <summary>
+            /// 继承
+            /// </summary>
+            [FrogSerializable(Comment = "Inherit")]
+            public Test_ToXmlBase InheritVal;
+
+            #endregion Inherit
 
             #region Int
 
@@ -628,10 +682,9 @@ namespace FrogSerialization
             /// <summary>
             /// 构造函数
             /// </summary>
-            /// <param name="parent">父级对象</param>
-            public Test_ToXmlOther(Test_ToXml parent)
+            public Test_ToXmlOther()
             {
-                ThisVal = parent;
+                ThisVal = this;
             }
 
             #endregion 构造函数
@@ -645,20 +698,28 @@ namespace FrogSerialization
             /// </summary>
             public override void RandomField()
             {
+                if (HasRandom) return;
+                HasRandom = true;
                 System.Random random = new System.Random();
                 IntVal = random.Next(int.MinValue, int.MaxValue);
                 ParentField = random.Next(int.MinValue, int.MaxValue);
+                if (OtherVal != null) OtherVal.RandomField();
+                if (InheritVal == null) InheritVal = new Test_ToXml();
             }
 
             /// <summary>
             /// 数据相同验证
             /// </summary>
             /// <param name="tester">测试对象</param>
+            /// <param name="listHasTest">已测试对象</param>
             /// <returns>测试结果</returns>
-            public bool ValueEqual(Test_ToXmlOther tester)
+            public bool ValueEqual(Test_ToXmlOther tester, List<Test_ToXmlBase> listHasTest)
             {
+                if (listHasTest.Contains(this)) return true;
+                listHasTest.Add(this);
                 if (IntVal != tester.IntVal) throw new Exception($"{nameof(IntVal)} is not equal!");
                 if (ParentField != tester.ParentField) throw new Exception($"{nameof(ParentField)} is not equal!");
+                if (OtherVal != null && !OtherVal.ValueEqual(tester.OtherVal, listHasTest)) throw new Exception($"{nameof(OtherVal)} is not equal!");
                 return true;
             }
 
@@ -673,7 +734,6 @@ namespace FrogSerialization
             #endregion 事件方法 
 
             #endregion 方法
-
         }
 
         #endregion 定义
@@ -719,19 +779,27 @@ namespace FrogSerialization
         public static void TestSystem()
         {
             Test_ToXml tester = new Test_ToXml();
+            tester.Name = "A";
+            tester.SerializableVal.OtherVal = new Test_ToXml();
+            tester.SerializableVal.OtherVal.Name = "B";
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml();
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.Name = "C";
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml();
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal.Name = "D";
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = tester.SerializableVal.OtherVal;
             tester.RandomField();
             XElement element = FrogSerialization.Serialize(tester);
             element.Save("Log.log");
             object result = null;
             FrogSerialization.Deserialize(element, ref result);
-            if (!tester.ValueEqual(result as Test_ToXml))
+            if (!tester.ValueEqual(result as Test_ToXml, new List<Test_ToXmlBase>()))
             {
                 throw new Exception("反序列化生成结果异常");
             }
             Test_ToXml copy = new Test_ToXml();
             result = copy;
             FrogSerialization.Deserialize(element, ref result);
-            if (!tester.ValueEqual(result as Test_ToXml))
+            if (!tester.ValueEqual(result as Test_ToXml, new List<Test_ToXmlBase>()))
             {
                 throw new Exception("反序列化修改结果异常");
             }
