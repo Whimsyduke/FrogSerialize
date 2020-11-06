@@ -172,13 +172,23 @@ namespace FrogSerialization
 
             #region 测试字段
 
+            #region Array
+
+            /// <summary>
+            /// 列表Val
+            /// </summary>
+            [FrogSerializable(Comment = "Array")]
+            public Test_ToXmlOther [] ArrayVal;
+
+            #endregion Array
+
             #region List
 
             /// <summary>
             /// 列表Val
             /// </summary>
             [FrogSerializable(Comment = "List")]
-            public List<Test_ToXmlOther> ListVal = new List<Test_ToXmlOther>();
+            public List<Test_ToXmlOther> ListVal;
 
             #endregion List
 
@@ -518,6 +528,13 @@ namespace FrogSerialization
                 MaterialVal = AssetDatabase.LoadMainAssetAtPath(random.Next(0, 2) == 0? Const_PathMaterialB : Const_PathMaterialC) as Material;
                 NonSerializedInt = random.Next(int.MinValue, IntValDefault);
                 SerializableVal.RandomField();
+                ArrayVal = new Test_ToXmlOther[random.Next(2, 6)];
+                for (int i = 0; i < ArrayVal.Count(); i++)
+                {
+                    ArrayVal[i] = new Test_ToXmlOther();
+                    ArrayVal[i].RandomField();
+                }
+                ListVal = new List<Test_ToXmlOther>();
                 for (int i = 0; i < random.Next(2, 6); i++)
                 {
                     ListVal.Add(new Test_ToXmlOther());
@@ -555,6 +572,12 @@ namespace FrogSerialization
                 if (MaterialVal.color != tester.MaterialVal.color) throw new Exception($"{nameof(MaterialVal)} is not equal!");
                 if (NonSerializedInt == tester.NonSerializedInt) throw new Exception($"{nameof(NonSerializedInt)} is not equal!");
                 if (!(SerializableVal).ValueEqual(tester.SerializableVal, listHasTest)) throw new Exception($"{nameof(SerializableVal)} is not equal!");
+                if (ArrayVal.Count() != tester.ArrayVal.Count()) throw new Exception($"{nameof(ArrayVal)} count is not equal!");
+                for (int i = 0; i < ArrayVal.Count(); i++)
+                {
+                    if (!ArrayVal[i].ValueEqual(tester.ArrayVal[i], listHasTest))
+                        throw new Exception($"{nameof(ArrayVal)}[{i}] count is not equal!");
+                }
                 if (ListVal.Count != tester.ListVal.Count) throw new Exception($"{nameof(ListVal)} count is not equal!");
                 for (int i = 0; i < ListVal.Count; i++)
                 {
@@ -778,6 +801,10 @@ namespace FrogSerialization
         [MenuItem("蛤序列化系统/自测试", false, 1)]
         public static void TestSystem()
         {
+            Test_ToXmlOther[] array = new Test_ToXmlOther[3];
+            Type type = array.GetType();
+            object newArray = Activator.CreateInstance(type, 3);
+
             Test_ToXml tester = new Test_ToXml();
             tester.Name = "A";
             tester.SerializableVal.OtherVal = new Test_ToXml();

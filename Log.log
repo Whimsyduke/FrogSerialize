@@ -4,6 +4,9 @@
     <TypeInfo Name="Test_ToXml">
       <Type Type="FrogSerialization.Const_TestEditorTool_Tester+Test_ToXml,Assembly-CSharp-Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
     </TypeInfo>
+    <TypeInfo Name="Test_ToXmlOther[]">
+      <Type Type="FrogSerialization.Const_TestEditorTool_Tester+Test_ToXmlOther[],Assembly-CSharp-Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    </TypeInfo>
     <TypeInfo Name="Test_ToXmlOther">
       <Type Type="FrogSerialization.Const_TestEditorTool_Tester+Test_ToXmlOther,Assembly-CSharp-Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
     </TypeInfo>
@@ -63,6 +66,331 @@
   </TypeList>
   <ObjectList>
     <Object Type="Test_ToXml">
+      <!--Array-->
+      <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]">
+        <Object Type="Test_ToXmlOther[]" Count="4">
+          <Object Type="Test_ToXmlOther">
+            <!--SerializableNull-->
+            <SerializableField Field="SerializableNullVal" />
+            <!--Other-->
+            <SerializableField Field="OtherVal" />
+            <!--This-->
+            <SerializableField Field="ThisVal">
+              <Object Reference="-/ArrayVal/{1}Array" />
+            </SerializableField>
+            <!--Inherit-->
+            <SerializableField Field="InheritVal">
+              <Object Type="Test_ToXml">
+                <!--Array-->
+                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                <!--List-->
+                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                <!--Name-->
+                <NonSerializedField Field="Name" Type="String" />
+                <!--Null-->
+                <NonSerializedField Field="NullVal" Type="String" />
+                <!--Bool-->
+                <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                <!--Byte-->
+                <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                <!--Char-->
+                <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                <!--Decimal-->
+                <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                <!--Double-->
+                <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                <!--Enum-->
+                <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                <!--Float-->
+                <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                <!--Int-->
+                <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                <!--Long-->
+                <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                <!--SByte-->
+                <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                <!--Short-->
+                <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                <!--String-->
+                <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                <!--UInt-->
+                <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                <!--ULong-->
+                <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                <!--UShort-->
+                <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                <!--Asset-->
+                <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                <!--Serializable-->
+                <SerializableField Field="SerializableVal">
+                  <Object Type="Test_ToXmlOther">
+                    <!--SerializableNull-->
+                    <SerializableField Field="SerializableNullVal" />
+                    <!--Other-->
+                    <SerializableField Field="OtherVal" />
+                    <!--This-->
+                    <SerializableField Field="ThisVal">
+                      <Object Reference="-/ArrayVal/{1}Array/InheritVal/SerializableVal" />
+                    </SerializableField>
+                    <!--Inherit-->
+                    <SerializableField Field="InheritVal" />
+                    <!--Int-->
+                    <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                    <!--Parent Field-->
+                    <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                  </Object>
+                </SerializableField>
+                <!--Parent Field-->
+                <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+              </Object>
+            </SerializableField>
+            <!--Int-->
+            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+            <!--Parent Field-->
+            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+          </Object>
+          <Object Type="Test_ToXmlOther">
+            <!--SerializableNull-->
+            <SerializableField Field="SerializableNullVal" />
+            <!--Other-->
+            <SerializableField Field="OtherVal" />
+            <!--This-->
+            <SerializableField Field="ThisVal">
+              <Object Reference="-/ArrayVal/{2}Array" />
+            </SerializableField>
+            <!--Inherit-->
+            <SerializableField Field="InheritVal">
+              <Object Type="Test_ToXml">
+                <!--Array-->
+                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                <!--List-->
+                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                <!--Name-->
+                <NonSerializedField Field="Name" Type="String" />
+                <!--Null-->
+                <NonSerializedField Field="NullVal" Type="String" />
+                <!--Bool-->
+                <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                <!--Byte-->
+                <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                <!--Char-->
+                <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                <!--Decimal-->
+                <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                <!--Double-->
+                <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                <!--Enum-->
+                <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                <!--Float-->
+                <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                <!--Int-->
+                <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                <!--Long-->
+                <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                <!--SByte-->
+                <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                <!--Short-->
+                <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                <!--String-->
+                <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                <!--UInt-->
+                <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                <!--ULong-->
+                <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                <!--UShort-->
+                <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                <!--Asset-->
+                <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                <!--Serializable-->
+                <SerializableField Field="SerializableVal">
+                  <Object Type="Test_ToXmlOther">
+                    <!--SerializableNull-->
+                    <SerializableField Field="SerializableNullVal" />
+                    <!--Other-->
+                    <SerializableField Field="OtherVal" />
+                    <!--This-->
+                    <SerializableField Field="ThisVal">
+                      <Object Reference="-/ArrayVal/{2}Array/InheritVal/SerializableVal" />
+                    </SerializableField>
+                    <!--Inherit-->
+                    <SerializableField Field="InheritVal" />
+                    <!--Int-->
+                    <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                    <!--Parent Field-->
+                    <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                  </Object>
+                </SerializableField>
+                <!--Parent Field-->
+                <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+              </Object>
+            </SerializableField>
+            <!--Int-->
+            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+            <!--Parent Field-->
+            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+          </Object>
+          <Object Type="Test_ToXmlOther">
+            <!--SerializableNull-->
+            <SerializableField Field="SerializableNullVal" />
+            <!--Other-->
+            <SerializableField Field="OtherVal" />
+            <!--This-->
+            <SerializableField Field="ThisVal">
+              <Object Reference="-/ArrayVal/{3}Array" />
+            </SerializableField>
+            <!--Inherit-->
+            <SerializableField Field="InheritVal">
+              <Object Type="Test_ToXml">
+                <!--Array-->
+                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                <!--List-->
+                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                <!--Name-->
+                <NonSerializedField Field="Name" Type="String" />
+                <!--Null-->
+                <NonSerializedField Field="NullVal" Type="String" />
+                <!--Bool-->
+                <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                <!--Byte-->
+                <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                <!--Char-->
+                <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                <!--Decimal-->
+                <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                <!--Double-->
+                <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                <!--Enum-->
+                <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                <!--Float-->
+                <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                <!--Int-->
+                <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                <!--Long-->
+                <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                <!--SByte-->
+                <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                <!--Short-->
+                <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                <!--String-->
+                <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                <!--UInt-->
+                <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                <!--ULong-->
+                <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                <!--UShort-->
+                <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                <!--Asset-->
+                <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                <!--Serializable-->
+                <SerializableField Field="SerializableVal">
+                  <Object Type="Test_ToXmlOther">
+                    <!--SerializableNull-->
+                    <SerializableField Field="SerializableNullVal" />
+                    <!--Other-->
+                    <SerializableField Field="OtherVal" />
+                    <!--This-->
+                    <SerializableField Field="ThisVal">
+                      <Object Reference="-/ArrayVal/{3}Array/InheritVal/SerializableVal" />
+                    </SerializableField>
+                    <!--Inherit-->
+                    <SerializableField Field="InheritVal" />
+                    <!--Int-->
+                    <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                    <!--Parent Field-->
+                    <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                  </Object>
+                </SerializableField>
+                <!--Parent Field-->
+                <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+              </Object>
+            </SerializableField>
+            <!--Int-->
+            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+            <!--Parent Field-->
+            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+          </Object>
+          <Object Type="Test_ToXmlOther">
+            <!--SerializableNull-->
+            <SerializableField Field="SerializableNullVal" />
+            <!--Other-->
+            <SerializableField Field="OtherVal" />
+            <!--This-->
+            <SerializableField Field="ThisVal">
+              <Object Reference="-/ArrayVal/{4}Array" />
+            </SerializableField>
+            <!--Inherit-->
+            <SerializableField Field="InheritVal">
+              <Object Type="Test_ToXml">
+                <!--Array-->
+                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                <!--List-->
+                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                <!--Name-->
+                <NonSerializedField Field="Name" Type="String" />
+                <!--Null-->
+                <NonSerializedField Field="NullVal" Type="String" />
+                <!--Bool-->
+                <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                <!--Byte-->
+                <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                <!--Char-->
+                <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                <!--Decimal-->
+                <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                <!--Double-->
+                <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                <!--Enum-->
+                <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                <!--Float-->
+                <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                <!--Int-->
+                <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                <!--Long-->
+                <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                <!--SByte-->
+                <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                <!--Short-->
+                <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                <!--String-->
+                <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                <!--UInt-->
+                <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                <!--ULong-->
+                <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                <!--UShort-->
+                <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                <!--Asset-->
+                <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                <!--Serializable-->
+                <SerializableField Field="SerializableVal">
+                  <Object Type="Test_ToXmlOther">
+                    <!--SerializableNull-->
+                    <SerializableField Field="SerializableNullVal" />
+                    <!--Other-->
+                    <SerializableField Field="OtherVal" />
+                    <!--This-->
+                    <SerializableField Field="ThisVal">
+                      <Object Reference="-/ArrayVal/{4}Array/InheritVal/SerializableVal" />
+                    </SerializableField>
+                    <!--Inherit-->
+                    <SerializableField Field="InheritVal" />
+                    <!--Int-->
+                    <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                    <!--Parent Field-->
+                    <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                  </Object>
+                </SerializableField>
+                <!--Parent Field-->
+                <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+              </Object>
+            </SerializableField>
+            <!--Int-->
+            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+            <!--Parent Field-->
+            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+          </Object>
+        </Object>
+      </NonSerializedField>
       <!--List-->
       <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
         <Object Type="List`1[Test_ToXmlOther]">
@@ -78,10 +406,10 @@
             <!--Inherit-->
             <SerializableField Field="InheritVal">
               <Object Type="Test_ToXml">
+                <!--Array-->
+                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
                 <!--List-->
-                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                  <Object Type="List`1[Test_ToXmlOther]" />
-                </NonSerializedField>
+                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
                 <!--Name-->
                 <NonSerializedField Field="Name" Type="String" />
                 <!--Null-->
@@ -142,9 +470,9 @@
               </Object>
             </SerializableField>
             <!--Int-->
-            <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
             <!--Parent Field-->
-            <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
           </Object>
           <Object Type="Test_ToXmlOther">
             <!--SerializableNull-->
@@ -158,10 +486,10 @@
             <!--Inherit-->
             <SerializableField Field="InheritVal">
               <Object Type="Test_ToXml">
+                <!--Array-->
+                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
                 <!--List-->
-                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                  <Object Type="List`1[Test_ToXmlOther]" />
-                </NonSerializedField>
+                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
                 <!--Name-->
                 <NonSerializedField Field="Name" Type="String" />
                 <!--Null-->
@@ -222,9 +550,89 @@
               </Object>
             </SerializableField>
             <!--Int-->
-            <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
             <!--Parent Field-->
-            <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+          </Object>
+          <Object Type="Test_ToXmlOther">
+            <!--SerializableNull-->
+            <SerializableField Field="SerializableNullVal" />
+            <!--Other-->
+            <SerializableField Field="OtherVal" />
+            <!--This-->
+            <SerializableField Field="ThisVal">
+              <Object Reference="-/ListVal/{3}List" />
+            </SerializableField>
+            <!--Inherit-->
+            <SerializableField Field="InheritVal">
+              <Object Type="Test_ToXml">
+                <!--Array-->
+                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                <!--List-->
+                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                <!--Name-->
+                <NonSerializedField Field="Name" Type="String" />
+                <!--Null-->
+                <NonSerializedField Field="NullVal" Type="String" />
+                <!--Bool-->
+                <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                <!--Byte-->
+                <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                <!--Char-->
+                <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                <!--Decimal-->
+                <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                <!--Double-->
+                <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                <!--Enum-->
+                <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                <!--Float-->
+                <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                <!--Int-->
+                <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                <!--Long-->
+                <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                <!--SByte-->
+                <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                <!--Short-->
+                <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                <!--String-->
+                <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                <!--UInt-->
+                <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                <!--ULong-->
+                <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                <!--UShort-->
+                <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                <!--Asset-->
+                <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                <!--Serializable-->
+                <SerializableField Field="SerializableVal">
+                  <Object Type="Test_ToXmlOther">
+                    <!--SerializableNull-->
+                    <SerializableField Field="SerializableNullVal" />
+                    <!--Other-->
+                    <SerializableField Field="OtherVal" />
+                    <!--This-->
+                    <SerializableField Field="ThisVal">
+                      <Object Reference="-/ListVal/{3}List/InheritVal/SerializableVal" />
+                    </SerializableField>
+                    <!--Inherit-->
+                    <SerializableField Field="InheritVal" />
+                    <!--Int-->
+                    <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                    <!--Parent Field-->
+                    <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                  </Object>
+                </SerializableField>
+                <!--Parent Field-->
+                <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+              </Object>
+            </SerializableField>
+            <!--Int-->
+            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+            <!--Parent Field-->
+            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
           </Object>
         </Object>
       </NonSerializedField>
@@ -233,37 +641,37 @@
       <!--Null-->
       <NonSerializedField Field="NullVal" Type="String" />
       <!--Bool-->
-      <NonSerializedField Field="BoolVal" Value="false" Type="Boolean" />
+      <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
       <!--Byte-->
-      <NonSerializedField Field="ByteVal" Value="74" Type="Byte" />
+      <NonSerializedField Field="ByteVal" Value="132" Type="Byte" />
       <!--Char-->
-      <NonSerializedField Field="CharVal" Value="邖" Type="Char" />
+      <NonSerializedField Field="CharVal" Value="烠" Type="Char" />
       <!--Decimal-->
-      <NonSerializedField Field="DecimalVal" Value="-1800244978" Type="Decimal" />
+      <NonSerializedField Field="DecimalVal" Value="-1142069454" Type="Decimal" />
       <!--Double-->
-      <NonSerializedField Field="DoubleVal" Value="-792226093" Type="Double" />
+      <NonSerializedField Field="DoubleVal" Value="590113592" Type="Double" />
       <!--Enum-->
       <NonSerializedField Field="EnumVal" Value="C" Type="EnumTest" />
       <!--Float-->
-      <NonSerializedField Field="FloatVal" Value="444598816" Type="Single" />
+      <NonSerializedField Field="FloatVal" Value="1.40858534E+09" Type="Single" />
       <!--Int-->
-      <NonSerializedField Field="IntVal" Value="101173208" Type="Int32" />
+      <NonSerializedField Field="IntVal" Value="837064428" Type="Int32" />
       <!--Long-->
-      <NonSerializedField Field="LongVal" Value="-2052823140" Type="Int64" />
+      <NonSerializedField Field="LongVal" Value="1601313080" Type="Int64" />
       <!--SByte-->
-      <NonSerializedField Field="SByteVal" Value="-61" Type="SByte" />
+      <NonSerializedField Field="SByteVal" Value="37" Type="SByte" />
       <!--Short-->
-      <NonSerializedField Field="ShortVal" Value="-26551" Type="Int16" />
+      <NonSerializedField Field="ShortVal" Value="-4346" Type="Int16" />
       <!--String-->
-      <NonSerializedField Field="StringVal" Value="1946356330" Type="String" />
+      <NonSerializedField Field="StringVal" Value="1421256040" Type="String" />
       <!--UInt-->
-      <NonSerializedField Field="UIntVal" Value="1389300296" Type="UInt32" />
+      <NonSerializedField Field="UIntVal" Value="1089221012" Type="UInt32" />
       <!--ULong-->
-      <NonSerializedField Field="ULongVal" Value="731060320" Type="UInt64" />
+      <NonSerializedField Field="ULongVal" Value="1878635407" Type="UInt64" />
       <!--UShort-->
-      <NonSerializedField Field="UShortVal" Value="57935" Type="UInt16" />
+      <NonSerializedField Field="UShortVal" Value="11984" Type="UInt16" />
       <!--Asset-->
-      <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialC.mat" Type="Material" />
+      <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialB.mat" Type="Material" />
       <!--Serializable-->
       <SerializableField Field="SerializableVal">
         <Object Type="Test_ToXmlOther">
@@ -272,6 +680,331 @@
           <!--Other-->
           <SerializableField Field="OtherVal">
             <Object Type="Test_ToXml">
+              <!--Array-->
+              <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]">
+                <Object Type="Test_ToXmlOther[]" Count="4">
+                  <Object Type="Test_ToXmlOther">
+                    <!--SerializableNull-->
+                    <SerializableField Field="SerializableNullVal" />
+                    <!--Other-->
+                    <SerializableField Field="OtherVal" />
+                    <!--This-->
+                    <SerializableField Field="ThisVal">
+                      <Object Reference="-/SerializableVal/OtherVal/ArrayVal/{1}Array" />
+                    </SerializableField>
+                    <!--Inherit-->
+                    <SerializableField Field="InheritVal">
+                      <Object Type="Test_ToXml">
+                        <!--Array-->
+                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                        <!--List-->
+                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                        <!--Name-->
+                        <NonSerializedField Field="Name" Type="String" />
+                        <!--Null-->
+                        <NonSerializedField Field="NullVal" Type="String" />
+                        <!--Bool-->
+                        <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                        <!--Byte-->
+                        <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                        <!--Char-->
+                        <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                        <!--Decimal-->
+                        <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                        <!--Double-->
+                        <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                        <!--Enum-->
+                        <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                        <!--Float-->
+                        <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                        <!--Int-->
+                        <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                        <!--Long-->
+                        <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                        <!--SByte-->
+                        <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                        <!--Short-->
+                        <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                        <!--String-->
+                        <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                        <!--UInt-->
+                        <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                        <!--ULong-->
+                        <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                        <!--UShort-->
+                        <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                        <!--Asset-->
+                        <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                        <!--Serializable-->
+                        <SerializableField Field="SerializableVal">
+                          <Object Type="Test_ToXmlOther">
+                            <!--SerializableNull-->
+                            <SerializableField Field="SerializableNullVal" />
+                            <!--Other-->
+                            <SerializableField Field="OtherVal" />
+                            <!--This-->
+                            <SerializableField Field="ThisVal">
+                              <Object Reference="-/SerializableVal/OtherVal/ArrayVal/{1}Array/InheritVal/SerializableVal" />
+                            </SerializableField>
+                            <!--Inherit-->
+                            <SerializableField Field="InheritVal" />
+                            <!--Int-->
+                            <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                            <!--Parent Field-->
+                            <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                          </Object>
+                        </SerializableField>
+                        <!--Parent Field-->
+                        <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                      </Object>
+                    </SerializableField>
+                    <!--Int-->
+                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                    <!--Parent Field-->
+                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                  </Object>
+                  <Object Type="Test_ToXmlOther">
+                    <!--SerializableNull-->
+                    <SerializableField Field="SerializableNullVal" />
+                    <!--Other-->
+                    <SerializableField Field="OtherVal" />
+                    <!--This-->
+                    <SerializableField Field="ThisVal">
+                      <Object Reference="-/SerializableVal/OtherVal/ArrayVal/{2}Array" />
+                    </SerializableField>
+                    <!--Inherit-->
+                    <SerializableField Field="InheritVal">
+                      <Object Type="Test_ToXml">
+                        <!--Array-->
+                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                        <!--List-->
+                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                        <!--Name-->
+                        <NonSerializedField Field="Name" Type="String" />
+                        <!--Null-->
+                        <NonSerializedField Field="NullVal" Type="String" />
+                        <!--Bool-->
+                        <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                        <!--Byte-->
+                        <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                        <!--Char-->
+                        <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                        <!--Decimal-->
+                        <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                        <!--Double-->
+                        <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                        <!--Enum-->
+                        <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                        <!--Float-->
+                        <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                        <!--Int-->
+                        <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                        <!--Long-->
+                        <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                        <!--SByte-->
+                        <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                        <!--Short-->
+                        <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                        <!--String-->
+                        <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                        <!--UInt-->
+                        <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                        <!--ULong-->
+                        <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                        <!--UShort-->
+                        <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                        <!--Asset-->
+                        <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                        <!--Serializable-->
+                        <SerializableField Field="SerializableVal">
+                          <Object Type="Test_ToXmlOther">
+                            <!--SerializableNull-->
+                            <SerializableField Field="SerializableNullVal" />
+                            <!--Other-->
+                            <SerializableField Field="OtherVal" />
+                            <!--This-->
+                            <SerializableField Field="ThisVal">
+                              <Object Reference="-/SerializableVal/OtherVal/ArrayVal/{2}Array/InheritVal/SerializableVal" />
+                            </SerializableField>
+                            <!--Inherit-->
+                            <SerializableField Field="InheritVal" />
+                            <!--Int-->
+                            <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                            <!--Parent Field-->
+                            <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                          </Object>
+                        </SerializableField>
+                        <!--Parent Field-->
+                        <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                      </Object>
+                    </SerializableField>
+                    <!--Int-->
+                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                    <!--Parent Field-->
+                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                  </Object>
+                  <Object Type="Test_ToXmlOther">
+                    <!--SerializableNull-->
+                    <SerializableField Field="SerializableNullVal" />
+                    <!--Other-->
+                    <SerializableField Field="OtherVal" />
+                    <!--This-->
+                    <SerializableField Field="ThisVal">
+                      <Object Reference="-/SerializableVal/OtherVal/ArrayVal/{3}Array" />
+                    </SerializableField>
+                    <!--Inherit-->
+                    <SerializableField Field="InheritVal">
+                      <Object Type="Test_ToXml">
+                        <!--Array-->
+                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                        <!--List-->
+                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                        <!--Name-->
+                        <NonSerializedField Field="Name" Type="String" />
+                        <!--Null-->
+                        <NonSerializedField Field="NullVal" Type="String" />
+                        <!--Bool-->
+                        <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                        <!--Byte-->
+                        <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                        <!--Char-->
+                        <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                        <!--Decimal-->
+                        <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                        <!--Double-->
+                        <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                        <!--Enum-->
+                        <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                        <!--Float-->
+                        <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                        <!--Int-->
+                        <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                        <!--Long-->
+                        <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                        <!--SByte-->
+                        <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                        <!--Short-->
+                        <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                        <!--String-->
+                        <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                        <!--UInt-->
+                        <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                        <!--ULong-->
+                        <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                        <!--UShort-->
+                        <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                        <!--Asset-->
+                        <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                        <!--Serializable-->
+                        <SerializableField Field="SerializableVal">
+                          <Object Type="Test_ToXmlOther">
+                            <!--SerializableNull-->
+                            <SerializableField Field="SerializableNullVal" />
+                            <!--Other-->
+                            <SerializableField Field="OtherVal" />
+                            <!--This-->
+                            <SerializableField Field="ThisVal">
+                              <Object Reference="-/SerializableVal/OtherVal/ArrayVal/{3}Array/InheritVal/SerializableVal" />
+                            </SerializableField>
+                            <!--Inherit-->
+                            <SerializableField Field="InheritVal" />
+                            <!--Int-->
+                            <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                            <!--Parent Field-->
+                            <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                          </Object>
+                        </SerializableField>
+                        <!--Parent Field-->
+                        <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                      </Object>
+                    </SerializableField>
+                    <!--Int-->
+                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                    <!--Parent Field-->
+                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                  </Object>
+                  <Object Type="Test_ToXmlOther">
+                    <!--SerializableNull-->
+                    <SerializableField Field="SerializableNullVal" />
+                    <!--Other-->
+                    <SerializableField Field="OtherVal" />
+                    <!--This-->
+                    <SerializableField Field="ThisVal">
+                      <Object Reference="-/SerializableVal/OtherVal/ArrayVal/{4}Array" />
+                    </SerializableField>
+                    <!--Inherit-->
+                    <SerializableField Field="InheritVal">
+                      <Object Type="Test_ToXml">
+                        <!--Array-->
+                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                        <!--List-->
+                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                        <!--Name-->
+                        <NonSerializedField Field="Name" Type="String" />
+                        <!--Null-->
+                        <NonSerializedField Field="NullVal" Type="String" />
+                        <!--Bool-->
+                        <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                        <!--Byte-->
+                        <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                        <!--Char-->
+                        <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                        <!--Decimal-->
+                        <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                        <!--Double-->
+                        <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                        <!--Enum-->
+                        <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                        <!--Float-->
+                        <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                        <!--Int-->
+                        <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                        <!--Long-->
+                        <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                        <!--SByte-->
+                        <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                        <!--Short-->
+                        <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                        <!--String-->
+                        <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                        <!--UInt-->
+                        <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                        <!--ULong-->
+                        <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                        <!--UShort-->
+                        <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                        <!--Asset-->
+                        <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                        <!--Serializable-->
+                        <SerializableField Field="SerializableVal">
+                          <Object Type="Test_ToXmlOther">
+                            <!--SerializableNull-->
+                            <SerializableField Field="SerializableNullVal" />
+                            <!--Other-->
+                            <SerializableField Field="OtherVal" />
+                            <!--This-->
+                            <SerializableField Field="ThisVal">
+                              <Object Reference="-/SerializableVal/OtherVal/ArrayVal/{4}Array/InheritVal/SerializableVal" />
+                            </SerializableField>
+                            <!--Inherit-->
+                            <SerializableField Field="InheritVal" />
+                            <!--Int-->
+                            <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                            <!--Parent Field-->
+                            <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                          </Object>
+                        </SerializableField>
+                        <!--Parent Field-->
+                        <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                      </Object>
+                    </SerializableField>
+                    <!--Int-->
+                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                    <!--Parent Field-->
+                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                  </Object>
+                </Object>
+              </NonSerializedField>
               <!--List-->
               <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
                 <Object Type="List`1[Test_ToXmlOther]">
@@ -287,10 +1020,10 @@
                     <!--Inherit-->
                     <SerializableField Field="InheritVal">
                       <Object Type="Test_ToXml">
+                        <!--Array-->
+                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
                         <!--List-->
-                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                          <Object Type="List`1[Test_ToXmlOther]" />
-                        </NonSerializedField>
+                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
                         <!--Name-->
                         <NonSerializedField Field="Name" Type="String" />
                         <!--Null-->
@@ -351,9 +1084,9 @@
                       </Object>
                     </SerializableField>
                     <!--Int-->
-                    <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
                     <!--Parent Field-->
-                    <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
                   </Object>
                   <Object Type="Test_ToXmlOther">
                     <!--SerializableNull-->
@@ -367,10 +1100,10 @@
                     <!--Inherit-->
                     <SerializableField Field="InheritVal">
                       <Object Type="Test_ToXml">
+                        <!--Array-->
+                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
                         <!--List-->
-                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                          <Object Type="List`1[Test_ToXmlOther]" />
-                        </NonSerializedField>
+                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
                         <!--Name-->
                         <NonSerializedField Field="Name" Type="String" />
                         <!--Null-->
@@ -431,9 +1164,89 @@
                       </Object>
                     </SerializableField>
                     <!--Int-->
-                    <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
                     <!--Parent Field-->
-                    <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                  </Object>
+                  <Object Type="Test_ToXmlOther">
+                    <!--SerializableNull-->
+                    <SerializableField Field="SerializableNullVal" />
+                    <!--Other-->
+                    <SerializableField Field="OtherVal" />
+                    <!--This-->
+                    <SerializableField Field="ThisVal">
+                      <Object Reference="-/SerializableVal/OtherVal/ListVal/{3}List" />
+                    </SerializableField>
+                    <!--Inherit-->
+                    <SerializableField Field="InheritVal">
+                      <Object Type="Test_ToXml">
+                        <!--Array-->
+                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                        <!--List-->
+                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                        <!--Name-->
+                        <NonSerializedField Field="Name" Type="String" />
+                        <!--Null-->
+                        <NonSerializedField Field="NullVal" Type="String" />
+                        <!--Bool-->
+                        <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                        <!--Byte-->
+                        <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                        <!--Char-->
+                        <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                        <!--Decimal-->
+                        <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                        <!--Double-->
+                        <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                        <!--Enum-->
+                        <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                        <!--Float-->
+                        <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                        <!--Int-->
+                        <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                        <!--Long-->
+                        <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                        <!--SByte-->
+                        <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                        <!--Short-->
+                        <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                        <!--String-->
+                        <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                        <!--UInt-->
+                        <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                        <!--ULong-->
+                        <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                        <!--UShort-->
+                        <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                        <!--Asset-->
+                        <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                        <!--Serializable-->
+                        <SerializableField Field="SerializableVal">
+                          <Object Type="Test_ToXmlOther">
+                            <!--SerializableNull-->
+                            <SerializableField Field="SerializableNullVal" />
+                            <!--Other-->
+                            <SerializableField Field="OtherVal" />
+                            <!--This-->
+                            <SerializableField Field="ThisVal">
+                              <Object Reference="-/SerializableVal/OtherVal/ListVal/{3}List/InheritVal/SerializableVal" />
+                            </SerializableField>
+                            <!--Inherit-->
+                            <SerializableField Field="InheritVal" />
+                            <!--Int-->
+                            <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                            <!--Parent Field-->
+                            <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                          </Object>
+                        </SerializableField>
+                        <!--Parent Field-->
+                        <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                      </Object>
+                    </SerializableField>
+                    <!--Int-->
+                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                    <!--Parent Field-->
+                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
                   </Object>
                 </Object>
               </NonSerializedField>
@@ -442,37 +1255,37 @@
               <!--Null-->
               <NonSerializedField Field="NullVal" Type="String" />
               <!--Bool-->
-              <NonSerializedField Field="BoolVal" Value="false" Type="Boolean" />
+              <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
               <!--Byte-->
-              <NonSerializedField Field="ByteVal" Value="74" Type="Byte" />
+              <NonSerializedField Field="ByteVal" Value="132" Type="Byte" />
               <!--Char-->
-              <NonSerializedField Field="CharVal" Value="邖" Type="Char" />
+              <NonSerializedField Field="CharVal" Value="烠" Type="Char" />
               <!--Decimal-->
-              <NonSerializedField Field="DecimalVal" Value="-1800244978" Type="Decimal" />
+              <NonSerializedField Field="DecimalVal" Value="-1142069454" Type="Decimal" />
               <!--Double-->
-              <NonSerializedField Field="DoubleVal" Value="-792226093" Type="Double" />
+              <NonSerializedField Field="DoubleVal" Value="590113592" Type="Double" />
               <!--Enum-->
               <NonSerializedField Field="EnumVal" Value="C" Type="EnumTest" />
               <!--Float-->
-              <NonSerializedField Field="FloatVal" Value="444598816" Type="Single" />
+              <NonSerializedField Field="FloatVal" Value="1.40858534E+09" Type="Single" />
               <!--Int-->
-              <NonSerializedField Field="IntVal" Value="101173208" Type="Int32" />
+              <NonSerializedField Field="IntVal" Value="837064428" Type="Int32" />
               <!--Long-->
-              <NonSerializedField Field="LongVal" Value="-2052823140" Type="Int64" />
+              <NonSerializedField Field="LongVal" Value="1601313080" Type="Int64" />
               <!--SByte-->
-              <NonSerializedField Field="SByteVal" Value="-61" Type="SByte" />
+              <NonSerializedField Field="SByteVal" Value="37" Type="SByte" />
               <!--Short-->
-              <NonSerializedField Field="ShortVal" Value="-26551" Type="Int16" />
+              <NonSerializedField Field="ShortVal" Value="-4346" Type="Int16" />
               <!--String-->
-              <NonSerializedField Field="StringVal" Value="1946356330" Type="String" />
+              <NonSerializedField Field="StringVal" Value="1421256040" Type="String" />
               <!--UInt-->
-              <NonSerializedField Field="UIntVal" Value="1389300296" Type="UInt32" />
+              <NonSerializedField Field="UIntVal" Value="1089221012" Type="UInt32" />
               <!--ULong-->
-              <NonSerializedField Field="ULongVal" Value="731060320" Type="UInt64" />
+              <NonSerializedField Field="ULongVal" Value="1878635407" Type="UInt64" />
               <!--UShort-->
-              <NonSerializedField Field="UShortVal" Value="57935" Type="UInt16" />
+              <NonSerializedField Field="UShortVal" Value="11984" Type="UInt16" />
               <!--Asset-->
-              <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialC.mat" Type="Material" />
+              <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialB.mat" Type="Material" />
               <!--Serializable-->
               <SerializableField Field="SerializableVal">
                 <Object Type="Test_ToXmlOther">
@@ -481,6 +1294,331 @@
                   <!--Other-->
                   <SerializableField Field="OtherVal">
                     <Object Type="Test_ToXml">
+                      <!--Array-->
+                      <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]">
+                        <Object Type="Test_ToXmlOther[]" Count="4">
+                          <Object Type="Test_ToXmlOther">
+                            <!--SerializableNull-->
+                            <SerializableField Field="SerializableNullVal" />
+                            <!--Other-->
+                            <SerializableField Field="OtherVal" />
+                            <!--This-->
+                            <SerializableField Field="ThisVal">
+                              <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{1}Array" />
+                            </SerializableField>
+                            <!--Inherit-->
+                            <SerializableField Field="InheritVal">
+                              <Object Type="Test_ToXml">
+                                <!--Array-->
+                                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                                <!--List-->
+                                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                                <!--Name-->
+                                <NonSerializedField Field="Name" Type="String" />
+                                <!--Null-->
+                                <NonSerializedField Field="NullVal" Type="String" />
+                                <!--Bool-->
+                                <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                                <!--Byte-->
+                                <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                                <!--Char-->
+                                <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                                <!--Decimal-->
+                                <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                                <!--Double-->
+                                <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                                <!--Enum-->
+                                <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                                <!--Float-->
+                                <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                                <!--Int-->
+                                <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                <!--Long-->
+                                <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                                <!--SByte-->
+                                <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                                <!--Short-->
+                                <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                                <!--String-->
+                                <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                                <!--UInt-->
+                                <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                                <!--ULong-->
+                                <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                                <!--UShort-->
+                                <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                                <!--Asset-->
+                                <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                                <!--Serializable-->
+                                <SerializableField Field="SerializableVal">
+                                  <Object Type="Test_ToXmlOther">
+                                    <!--SerializableNull-->
+                                    <SerializableField Field="SerializableNullVal" />
+                                    <!--Other-->
+                                    <SerializableField Field="OtherVal" />
+                                    <!--This-->
+                                    <SerializableField Field="ThisVal">
+                                      <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{1}Array/InheritVal/SerializableVal" />
+                                    </SerializableField>
+                                    <!--Inherit-->
+                                    <SerializableField Field="InheritVal" />
+                                    <!--Int-->
+                                    <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                    <!--Parent Field-->
+                                    <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                  </Object>
+                                </SerializableField>
+                                <!--Parent Field-->
+                                <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                              </Object>
+                            </SerializableField>
+                            <!--Int-->
+                            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                            <!--Parent Field-->
+                            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                          </Object>
+                          <Object Type="Test_ToXmlOther">
+                            <!--SerializableNull-->
+                            <SerializableField Field="SerializableNullVal" />
+                            <!--Other-->
+                            <SerializableField Field="OtherVal" />
+                            <!--This-->
+                            <SerializableField Field="ThisVal">
+                              <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{2}Array" />
+                            </SerializableField>
+                            <!--Inherit-->
+                            <SerializableField Field="InheritVal">
+                              <Object Type="Test_ToXml">
+                                <!--Array-->
+                                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                                <!--List-->
+                                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                                <!--Name-->
+                                <NonSerializedField Field="Name" Type="String" />
+                                <!--Null-->
+                                <NonSerializedField Field="NullVal" Type="String" />
+                                <!--Bool-->
+                                <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                                <!--Byte-->
+                                <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                                <!--Char-->
+                                <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                                <!--Decimal-->
+                                <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                                <!--Double-->
+                                <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                                <!--Enum-->
+                                <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                                <!--Float-->
+                                <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                                <!--Int-->
+                                <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                <!--Long-->
+                                <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                                <!--SByte-->
+                                <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                                <!--Short-->
+                                <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                                <!--String-->
+                                <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                                <!--UInt-->
+                                <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                                <!--ULong-->
+                                <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                                <!--UShort-->
+                                <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                                <!--Asset-->
+                                <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                                <!--Serializable-->
+                                <SerializableField Field="SerializableVal">
+                                  <Object Type="Test_ToXmlOther">
+                                    <!--SerializableNull-->
+                                    <SerializableField Field="SerializableNullVal" />
+                                    <!--Other-->
+                                    <SerializableField Field="OtherVal" />
+                                    <!--This-->
+                                    <SerializableField Field="ThisVal">
+                                      <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{2}Array/InheritVal/SerializableVal" />
+                                    </SerializableField>
+                                    <!--Inherit-->
+                                    <SerializableField Field="InheritVal" />
+                                    <!--Int-->
+                                    <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                    <!--Parent Field-->
+                                    <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                  </Object>
+                                </SerializableField>
+                                <!--Parent Field-->
+                                <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                              </Object>
+                            </SerializableField>
+                            <!--Int-->
+                            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                            <!--Parent Field-->
+                            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                          </Object>
+                          <Object Type="Test_ToXmlOther">
+                            <!--SerializableNull-->
+                            <SerializableField Field="SerializableNullVal" />
+                            <!--Other-->
+                            <SerializableField Field="OtherVal" />
+                            <!--This-->
+                            <SerializableField Field="ThisVal">
+                              <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{3}Array" />
+                            </SerializableField>
+                            <!--Inherit-->
+                            <SerializableField Field="InheritVal">
+                              <Object Type="Test_ToXml">
+                                <!--Array-->
+                                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                                <!--List-->
+                                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                                <!--Name-->
+                                <NonSerializedField Field="Name" Type="String" />
+                                <!--Null-->
+                                <NonSerializedField Field="NullVal" Type="String" />
+                                <!--Bool-->
+                                <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                                <!--Byte-->
+                                <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                                <!--Char-->
+                                <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                                <!--Decimal-->
+                                <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                                <!--Double-->
+                                <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                                <!--Enum-->
+                                <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                                <!--Float-->
+                                <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                                <!--Int-->
+                                <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                <!--Long-->
+                                <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                                <!--SByte-->
+                                <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                                <!--Short-->
+                                <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                                <!--String-->
+                                <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                                <!--UInt-->
+                                <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                                <!--ULong-->
+                                <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                                <!--UShort-->
+                                <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                                <!--Asset-->
+                                <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                                <!--Serializable-->
+                                <SerializableField Field="SerializableVal">
+                                  <Object Type="Test_ToXmlOther">
+                                    <!--SerializableNull-->
+                                    <SerializableField Field="SerializableNullVal" />
+                                    <!--Other-->
+                                    <SerializableField Field="OtherVal" />
+                                    <!--This-->
+                                    <SerializableField Field="ThisVal">
+                                      <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{3}Array/InheritVal/SerializableVal" />
+                                    </SerializableField>
+                                    <!--Inherit-->
+                                    <SerializableField Field="InheritVal" />
+                                    <!--Int-->
+                                    <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                    <!--Parent Field-->
+                                    <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                  </Object>
+                                </SerializableField>
+                                <!--Parent Field-->
+                                <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                              </Object>
+                            </SerializableField>
+                            <!--Int-->
+                            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                            <!--Parent Field-->
+                            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                          </Object>
+                          <Object Type="Test_ToXmlOther">
+                            <!--SerializableNull-->
+                            <SerializableField Field="SerializableNullVal" />
+                            <!--Other-->
+                            <SerializableField Field="OtherVal" />
+                            <!--This-->
+                            <SerializableField Field="ThisVal">
+                              <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{4}Array" />
+                            </SerializableField>
+                            <!--Inherit-->
+                            <SerializableField Field="InheritVal">
+                              <Object Type="Test_ToXml">
+                                <!--Array-->
+                                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                                <!--List-->
+                                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                                <!--Name-->
+                                <NonSerializedField Field="Name" Type="String" />
+                                <!--Null-->
+                                <NonSerializedField Field="NullVal" Type="String" />
+                                <!--Bool-->
+                                <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                                <!--Byte-->
+                                <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                                <!--Char-->
+                                <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                                <!--Decimal-->
+                                <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                                <!--Double-->
+                                <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                                <!--Enum-->
+                                <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                                <!--Float-->
+                                <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                                <!--Int-->
+                                <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                <!--Long-->
+                                <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                                <!--SByte-->
+                                <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                                <!--Short-->
+                                <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                                <!--String-->
+                                <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                                <!--UInt-->
+                                <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                                <!--ULong-->
+                                <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                                <!--UShort-->
+                                <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                                <!--Asset-->
+                                <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                                <!--Serializable-->
+                                <SerializableField Field="SerializableVal">
+                                  <Object Type="Test_ToXmlOther">
+                                    <!--SerializableNull-->
+                                    <SerializableField Field="SerializableNullVal" />
+                                    <!--Other-->
+                                    <SerializableField Field="OtherVal" />
+                                    <!--This-->
+                                    <SerializableField Field="ThisVal">
+                                      <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{4}Array/InheritVal/SerializableVal" />
+                                    </SerializableField>
+                                    <!--Inherit-->
+                                    <SerializableField Field="InheritVal" />
+                                    <!--Int-->
+                                    <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                    <!--Parent Field-->
+                                    <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                  </Object>
+                                </SerializableField>
+                                <!--Parent Field-->
+                                <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                              </Object>
+                            </SerializableField>
+                            <!--Int-->
+                            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                            <!--Parent Field-->
+                            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                          </Object>
+                        </Object>
+                      </NonSerializedField>
                       <!--List-->
                       <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
                         <Object Type="List`1[Test_ToXmlOther]">
@@ -496,10 +1634,10 @@
                             <!--Inherit-->
                             <SerializableField Field="InheritVal">
                               <Object Type="Test_ToXml">
+                                <!--Array-->
+                                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
                                 <!--List-->
-                                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                                  <Object Type="List`1[Test_ToXmlOther]" />
-                                </NonSerializedField>
+                                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
                                 <!--Name-->
                                 <NonSerializedField Field="Name" Type="String" />
                                 <!--Null-->
@@ -560,9 +1698,9 @@
                               </Object>
                             </SerializableField>
                             <!--Int-->
-                            <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+                            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
                             <!--Parent Field-->
-                            <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+                            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
                           </Object>
                           <Object Type="Test_ToXmlOther">
                             <!--SerializableNull-->
@@ -576,10 +1714,10 @@
                             <!--Inherit-->
                             <SerializableField Field="InheritVal">
                               <Object Type="Test_ToXml">
+                                <!--Array-->
+                                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
                                 <!--List-->
-                                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                                  <Object Type="List`1[Test_ToXmlOther]" />
-                                </NonSerializedField>
+                                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
                                 <!--Name-->
                                 <NonSerializedField Field="Name" Type="String" />
                                 <!--Null-->
@@ -640,9 +1778,89 @@
                               </Object>
                             </SerializableField>
                             <!--Int-->
-                            <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+                            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
                             <!--Parent Field-->
-                            <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+                            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                          </Object>
+                          <Object Type="Test_ToXmlOther">
+                            <!--SerializableNull-->
+                            <SerializableField Field="SerializableNullVal" />
+                            <!--Other-->
+                            <SerializableField Field="OtherVal" />
+                            <!--This-->
+                            <SerializableField Field="ThisVal">
+                              <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/ListVal/{3}List" />
+                            </SerializableField>
+                            <!--Inherit-->
+                            <SerializableField Field="InheritVal">
+                              <Object Type="Test_ToXml">
+                                <!--Array-->
+                                <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                                <!--List-->
+                                <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                                <!--Name-->
+                                <NonSerializedField Field="Name" Type="String" />
+                                <!--Null-->
+                                <NonSerializedField Field="NullVal" Type="String" />
+                                <!--Bool-->
+                                <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                                <!--Byte-->
+                                <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                                <!--Char-->
+                                <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                                <!--Decimal-->
+                                <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                                <!--Double-->
+                                <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                                <!--Enum-->
+                                <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                                <!--Float-->
+                                <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                                <!--Int-->
+                                <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                <!--Long-->
+                                <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                                <!--SByte-->
+                                <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                                <!--Short-->
+                                <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                                <!--String-->
+                                <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                                <!--UInt-->
+                                <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                                <!--ULong-->
+                                <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                                <!--UShort-->
+                                <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                                <!--Asset-->
+                                <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                                <!--Serializable-->
+                                <SerializableField Field="SerializableVal">
+                                  <Object Type="Test_ToXmlOther">
+                                    <!--SerializableNull-->
+                                    <SerializableField Field="SerializableNullVal" />
+                                    <!--Other-->
+                                    <SerializableField Field="OtherVal" />
+                                    <!--This-->
+                                    <SerializableField Field="ThisVal">
+                                      <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/ListVal/{3}List/InheritVal/SerializableVal" />
+                                    </SerializableField>
+                                    <!--Inherit-->
+                                    <SerializableField Field="InheritVal" />
+                                    <!--Int-->
+                                    <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                    <!--Parent Field-->
+                                    <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                  </Object>
+                                </SerializableField>
+                                <!--Parent Field-->
+                                <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                              </Object>
+                            </SerializableField>
+                            <!--Int-->
+                            <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                            <!--Parent Field-->
+                            <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
                           </Object>
                         </Object>
                       </NonSerializedField>
@@ -651,37 +1869,37 @@
                       <!--Null-->
                       <NonSerializedField Field="NullVal" Type="String" />
                       <!--Bool-->
-                      <NonSerializedField Field="BoolVal" Value="false" Type="Boolean" />
+                      <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
                       <!--Byte-->
-                      <NonSerializedField Field="ByteVal" Value="74" Type="Byte" />
+                      <NonSerializedField Field="ByteVal" Value="132" Type="Byte" />
                       <!--Char-->
-                      <NonSerializedField Field="CharVal" Value="邖" Type="Char" />
+                      <NonSerializedField Field="CharVal" Value="烠" Type="Char" />
                       <!--Decimal-->
-                      <NonSerializedField Field="DecimalVal" Value="-1800244978" Type="Decimal" />
+                      <NonSerializedField Field="DecimalVal" Value="-1142069454" Type="Decimal" />
                       <!--Double-->
-                      <NonSerializedField Field="DoubleVal" Value="-792226093" Type="Double" />
+                      <NonSerializedField Field="DoubleVal" Value="590113592" Type="Double" />
                       <!--Enum-->
                       <NonSerializedField Field="EnumVal" Value="C" Type="EnumTest" />
                       <!--Float-->
-                      <NonSerializedField Field="FloatVal" Value="444598816" Type="Single" />
+                      <NonSerializedField Field="FloatVal" Value="1.40858534E+09" Type="Single" />
                       <!--Int-->
-                      <NonSerializedField Field="IntVal" Value="101173208" Type="Int32" />
+                      <NonSerializedField Field="IntVal" Value="837064428" Type="Int32" />
                       <!--Long-->
-                      <NonSerializedField Field="LongVal" Value="-2052823140" Type="Int64" />
+                      <NonSerializedField Field="LongVal" Value="1601313080" Type="Int64" />
                       <!--SByte-->
-                      <NonSerializedField Field="SByteVal" Value="-61" Type="SByte" />
+                      <NonSerializedField Field="SByteVal" Value="37" Type="SByte" />
                       <!--Short-->
-                      <NonSerializedField Field="ShortVal" Value="-26551" Type="Int16" />
+                      <NonSerializedField Field="ShortVal" Value="-4346" Type="Int16" />
                       <!--String-->
-                      <NonSerializedField Field="StringVal" Value="1946356330" Type="String" />
+                      <NonSerializedField Field="StringVal" Value="1421256040" Type="String" />
                       <!--UInt-->
-                      <NonSerializedField Field="UIntVal" Value="1389300296" Type="UInt32" />
+                      <NonSerializedField Field="UIntVal" Value="1089221012" Type="UInt32" />
                       <!--ULong-->
-                      <NonSerializedField Field="ULongVal" Value="731060320" Type="UInt64" />
+                      <NonSerializedField Field="ULongVal" Value="1878635407" Type="UInt64" />
                       <!--UShort-->
-                      <NonSerializedField Field="UShortVal" Value="57935" Type="UInt16" />
+                      <NonSerializedField Field="UShortVal" Value="11984" Type="UInt16" />
                       <!--Asset-->
-                      <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialC.mat" Type="Material" />
+                      <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialB.mat" Type="Material" />
                       <!--Serializable-->
                       <SerializableField Field="SerializableVal">
                         <Object Type="Test_ToXmlOther">
@@ -690,6 +1908,331 @@
                           <!--Other-->
                           <SerializableField Field="OtherVal">
                             <Object Type="Test_ToXml">
+                              <!--Array-->
+                              <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]">
+                                <Object Type="Test_ToXmlOther[]" Count="4">
+                                  <Object Type="Test_ToXmlOther">
+                                    <!--SerializableNull-->
+                                    <SerializableField Field="SerializableNullVal" />
+                                    <!--Other-->
+                                    <SerializableField Field="OtherVal" />
+                                    <!--This-->
+                                    <SerializableField Field="ThisVal">
+                                      <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{1}Array" />
+                                    </SerializableField>
+                                    <!--Inherit-->
+                                    <SerializableField Field="InheritVal">
+                                      <Object Type="Test_ToXml">
+                                        <!--Array-->
+                                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                                        <!--List-->
+                                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                                        <!--Name-->
+                                        <NonSerializedField Field="Name" Type="String" />
+                                        <!--Null-->
+                                        <NonSerializedField Field="NullVal" Type="String" />
+                                        <!--Bool-->
+                                        <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                                        <!--Byte-->
+                                        <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                                        <!--Char-->
+                                        <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                                        <!--Decimal-->
+                                        <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                                        <!--Double-->
+                                        <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                                        <!--Enum-->
+                                        <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                                        <!--Float-->
+                                        <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                                        <!--Int-->
+                                        <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                        <!--Long-->
+                                        <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                                        <!--SByte-->
+                                        <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                                        <!--Short-->
+                                        <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                                        <!--String-->
+                                        <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                                        <!--UInt-->
+                                        <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                                        <!--ULong-->
+                                        <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                                        <!--UShort-->
+                                        <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                                        <!--Asset-->
+                                        <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                                        <!--Serializable-->
+                                        <SerializableField Field="SerializableVal">
+                                          <Object Type="Test_ToXmlOther">
+                                            <!--SerializableNull-->
+                                            <SerializableField Field="SerializableNullVal" />
+                                            <!--Other-->
+                                            <SerializableField Field="OtherVal" />
+                                            <!--This-->
+                                            <SerializableField Field="ThisVal">
+                                              <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{1}Array/InheritVal/SerializableVal" />
+                                            </SerializableField>
+                                            <!--Inherit-->
+                                            <SerializableField Field="InheritVal" />
+                                            <!--Int-->
+                                            <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                            <!--Parent Field-->
+                                            <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                          </Object>
+                                        </SerializableField>
+                                        <!--Parent Field-->
+                                        <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                      </Object>
+                                    </SerializableField>
+                                    <!--Int-->
+                                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                                    <!--Parent Field-->
+                                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                                  </Object>
+                                  <Object Type="Test_ToXmlOther">
+                                    <!--SerializableNull-->
+                                    <SerializableField Field="SerializableNullVal" />
+                                    <!--Other-->
+                                    <SerializableField Field="OtherVal" />
+                                    <!--This-->
+                                    <SerializableField Field="ThisVal">
+                                      <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{2}Array" />
+                                    </SerializableField>
+                                    <!--Inherit-->
+                                    <SerializableField Field="InheritVal">
+                                      <Object Type="Test_ToXml">
+                                        <!--Array-->
+                                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                                        <!--List-->
+                                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                                        <!--Name-->
+                                        <NonSerializedField Field="Name" Type="String" />
+                                        <!--Null-->
+                                        <NonSerializedField Field="NullVal" Type="String" />
+                                        <!--Bool-->
+                                        <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                                        <!--Byte-->
+                                        <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                                        <!--Char-->
+                                        <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                                        <!--Decimal-->
+                                        <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                                        <!--Double-->
+                                        <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                                        <!--Enum-->
+                                        <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                                        <!--Float-->
+                                        <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                                        <!--Int-->
+                                        <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                        <!--Long-->
+                                        <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                                        <!--SByte-->
+                                        <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                                        <!--Short-->
+                                        <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                                        <!--String-->
+                                        <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                                        <!--UInt-->
+                                        <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                                        <!--ULong-->
+                                        <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                                        <!--UShort-->
+                                        <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                                        <!--Asset-->
+                                        <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                                        <!--Serializable-->
+                                        <SerializableField Field="SerializableVal">
+                                          <Object Type="Test_ToXmlOther">
+                                            <!--SerializableNull-->
+                                            <SerializableField Field="SerializableNullVal" />
+                                            <!--Other-->
+                                            <SerializableField Field="OtherVal" />
+                                            <!--This-->
+                                            <SerializableField Field="ThisVal">
+                                              <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{2}Array/InheritVal/SerializableVal" />
+                                            </SerializableField>
+                                            <!--Inherit-->
+                                            <SerializableField Field="InheritVal" />
+                                            <!--Int-->
+                                            <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                            <!--Parent Field-->
+                                            <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                          </Object>
+                                        </SerializableField>
+                                        <!--Parent Field-->
+                                        <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                      </Object>
+                                    </SerializableField>
+                                    <!--Int-->
+                                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                                    <!--Parent Field-->
+                                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                                  </Object>
+                                  <Object Type="Test_ToXmlOther">
+                                    <!--SerializableNull-->
+                                    <SerializableField Field="SerializableNullVal" />
+                                    <!--Other-->
+                                    <SerializableField Field="OtherVal" />
+                                    <!--This-->
+                                    <SerializableField Field="ThisVal">
+                                      <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{3}Array" />
+                                    </SerializableField>
+                                    <!--Inherit-->
+                                    <SerializableField Field="InheritVal">
+                                      <Object Type="Test_ToXml">
+                                        <!--Array-->
+                                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                                        <!--List-->
+                                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                                        <!--Name-->
+                                        <NonSerializedField Field="Name" Type="String" />
+                                        <!--Null-->
+                                        <NonSerializedField Field="NullVal" Type="String" />
+                                        <!--Bool-->
+                                        <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                                        <!--Byte-->
+                                        <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                                        <!--Char-->
+                                        <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                                        <!--Decimal-->
+                                        <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                                        <!--Double-->
+                                        <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                                        <!--Enum-->
+                                        <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                                        <!--Float-->
+                                        <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                                        <!--Int-->
+                                        <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                        <!--Long-->
+                                        <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                                        <!--SByte-->
+                                        <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                                        <!--Short-->
+                                        <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                                        <!--String-->
+                                        <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                                        <!--UInt-->
+                                        <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                                        <!--ULong-->
+                                        <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                                        <!--UShort-->
+                                        <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                                        <!--Asset-->
+                                        <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                                        <!--Serializable-->
+                                        <SerializableField Field="SerializableVal">
+                                          <Object Type="Test_ToXmlOther">
+                                            <!--SerializableNull-->
+                                            <SerializableField Field="SerializableNullVal" />
+                                            <!--Other-->
+                                            <SerializableField Field="OtherVal" />
+                                            <!--This-->
+                                            <SerializableField Field="ThisVal">
+                                              <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{3}Array/InheritVal/SerializableVal" />
+                                            </SerializableField>
+                                            <!--Inherit-->
+                                            <SerializableField Field="InheritVal" />
+                                            <!--Int-->
+                                            <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                            <!--Parent Field-->
+                                            <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                          </Object>
+                                        </SerializableField>
+                                        <!--Parent Field-->
+                                        <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                      </Object>
+                                    </SerializableField>
+                                    <!--Int-->
+                                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                                    <!--Parent Field-->
+                                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                                  </Object>
+                                  <Object Type="Test_ToXmlOther">
+                                    <!--SerializableNull-->
+                                    <SerializableField Field="SerializableNullVal" />
+                                    <!--Other-->
+                                    <SerializableField Field="OtherVal" />
+                                    <!--This-->
+                                    <SerializableField Field="ThisVal">
+                                      <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{4}Array" />
+                                    </SerializableField>
+                                    <!--Inherit-->
+                                    <SerializableField Field="InheritVal">
+                                      <Object Type="Test_ToXml">
+                                        <!--Array-->
+                                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                                        <!--List-->
+                                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                                        <!--Name-->
+                                        <NonSerializedField Field="Name" Type="String" />
+                                        <!--Null-->
+                                        <NonSerializedField Field="NullVal" Type="String" />
+                                        <!--Bool-->
+                                        <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                                        <!--Byte-->
+                                        <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                                        <!--Char-->
+                                        <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                                        <!--Decimal-->
+                                        <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                                        <!--Double-->
+                                        <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                                        <!--Enum-->
+                                        <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                                        <!--Float-->
+                                        <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                                        <!--Int-->
+                                        <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                        <!--Long-->
+                                        <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                                        <!--SByte-->
+                                        <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                                        <!--Short-->
+                                        <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                                        <!--String-->
+                                        <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                                        <!--UInt-->
+                                        <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                                        <!--ULong-->
+                                        <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                                        <!--UShort-->
+                                        <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                                        <!--Asset-->
+                                        <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                                        <!--Serializable-->
+                                        <SerializableField Field="SerializableVal">
+                                          <Object Type="Test_ToXmlOther">
+                                            <!--SerializableNull-->
+                                            <SerializableField Field="SerializableNullVal" />
+                                            <!--Other-->
+                                            <SerializableField Field="OtherVal" />
+                                            <!--This-->
+                                            <SerializableField Field="ThisVal">
+                                              <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/SerializableVal/OtherVal/ArrayVal/{4}Array/InheritVal/SerializableVal" />
+                                            </SerializableField>
+                                            <!--Inherit-->
+                                            <SerializableField Field="InheritVal" />
+                                            <!--Int-->
+                                            <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                            <!--Parent Field-->
+                                            <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                          </Object>
+                                        </SerializableField>
+                                        <!--Parent Field-->
+                                        <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                      </Object>
+                                    </SerializableField>
+                                    <!--Int-->
+                                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                                    <!--Parent Field-->
+                                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                                  </Object>
+                                </Object>
+                              </NonSerializedField>
                               <!--List-->
                               <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
                                 <Object Type="List`1[Test_ToXmlOther]">
@@ -705,10 +2248,10 @@
                                     <!--Inherit-->
                                     <SerializableField Field="InheritVal">
                                       <Object Type="Test_ToXml">
+                                        <!--Array-->
+                                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
                                         <!--List-->
-                                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                                          <Object Type="List`1[Test_ToXmlOther]" />
-                                        </NonSerializedField>
+                                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
                                         <!--Name-->
                                         <NonSerializedField Field="Name" Type="String" />
                                         <!--Null-->
@@ -769,9 +2312,9 @@
                                       </Object>
                                     </SerializableField>
                                     <!--Int-->
-                                    <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+                                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
                                     <!--Parent Field-->
-                                    <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+                                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
                                   </Object>
                                   <Object Type="Test_ToXmlOther">
                                     <!--SerializableNull-->
@@ -785,10 +2328,10 @@
                                     <!--Inherit-->
                                     <SerializableField Field="InheritVal">
                                       <Object Type="Test_ToXml">
+                                        <!--Array-->
+                                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
                                         <!--List-->
-                                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                                          <Object Type="List`1[Test_ToXmlOther]" />
-                                        </NonSerializedField>
+                                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
                                         <!--Name-->
                                         <NonSerializedField Field="Name" Type="String" />
                                         <!--Null-->
@@ -849,9 +2392,89 @@
                                       </Object>
                                     </SerializableField>
                                     <!--Int-->
-                                    <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+                                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
                                     <!--Parent Field-->
-                                    <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+                                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
+                                  </Object>
+                                  <Object Type="Test_ToXmlOther">
+                                    <!--SerializableNull-->
+                                    <SerializableField Field="SerializableNullVal" />
+                                    <!--Other-->
+                                    <SerializableField Field="OtherVal" />
+                                    <!--This-->
+                                    <SerializableField Field="ThisVal">
+                                      <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/SerializableVal/OtherVal/ListVal/{3}List" />
+                                    </SerializableField>
+                                    <!--Inherit-->
+                                    <SerializableField Field="InheritVal">
+                                      <Object Type="Test_ToXml">
+                                        <!--Array-->
+                                        <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
+                                        <!--List-->
+                                        <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
+                                        <!--Name-->
+                                        <NonSerializedField Field="Name" Type="String" />
+                                        <!--Null-->
+                                        <NonSerializedField Field="NullVal" Type="String" />
+                                        <!--Bool-->
+                                        <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
+                                        <!--Byte-->
+                                        <NonSerializedField Field="ByteVal" Value="127" Type="Byte" />
+                                        <!--Char-->
+                                        <NonSerializedField Field="CharVal" Value=" " Type="Char" />
+                                        <!--Decimal-->
+                                        <NonSerializedField Field="DecimalVal" Value="1.23456789" Type="Decimal" />
+                                        <!--Double-->
+                                        <NonSerializedField Field="DoubleVal" Value="1.23456789" Type="Double" />
+                                        <!--Enum-->
+                                        <NonSerializedField Field="EnumVal" Value="E" Type="EnumTest" />
+                                        <!--Float-->
+                                        <NonSerializedField Field="FloatVal" Value="1.23456788" Type="Single" />
+                                        <!--Int-->
+                                        <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                        <!--Long-->
+                                        <NonSerializedField Field="LongVal" Value="1024" Type="Int64" />
+                                        <!--SByte-->
+                                        <NonSerializedField Field="SByteVal" Value="-127" Type="SByte" />
+                                        <!--Short-->
+                                        <NonSerializedField Field="ShortVal" Value="1024" Type="Int16" />
+                                        <!--String-->
+                                        <NonSerializedField Field="StringVal" Value="TEST_DEFAULT" Type="String" />
+                                        <!--UInt-->
+                                        <NonSerializedField Field="UIntVal" Value="1024" Type="UInt32" />
+                                        <!--ULong-->
+                                        <NonSerializedField Field="ULongVal" Value="1024" Type="UInt64" />
+                                        <!--UShort-->
+                                        <NonSerializedField Field="UShortVal" Value="1024" Type="UInt16" />
+                                        <!--Asset-->
+                                        <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialA.mat" Type="Material" />
+                                        <!--Serializable-->
+                                        <SerializableField Field="SerializableVal">
+                                          <Object Type="Test_ToXmlOther">
+                                            <!--SerializableNull-->
+                                            <SerializableField Field="SerializableNullVal" />
+                                            <!--Other-->
+                                            <SerializableField Field="OtherVal" />
+                                            <!--This-->
+                                            <SerializableField Field="ThisVal">
+                                              <Object Reference="-/SerializableVal/OtherVal/SerializableVal/OtherVal/SerializableVal/OtherVal/ListVal/{3}List/InheritVal/SerializableVal" />
+                                            </SerializableField>
+                                            <!--Inherit-->
+                                            <SerializableField Field="InheritVal" />
+                                            <!--Int-->
+                                            <NonSerializedField Field="IntVal" Value="1024" Type="Int32" />
+                                            <!--Parent Field-->
+                                            <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                          </Object>
+                                        </SerializableField>
+                                        <!--Parent Field-->
+                                        <NonSerializedField Field="ParentField" Value="1024" Type="Int32" />
+                                      </Object>
+                                    </SerializableField>
+                                    <!--Int-->
+                                    <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
+                                    <!--Parent Field-->
+                                    <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
                                   </Object>
                                 </Object>
                               </NonSerializedField>
@@ -860,37 +2483,37 @@
                               <!--Null-->
                               <NonSerializedField Field="NullVal" Type="String" />
                               <!--Bool-->
-                              <NonSerializedField Field="BoolVal" Value="false" Type="Boolean" />
+                              <NonSerializedField Field="BoolVal" Value="true" Type="Boolean" />
                               <!--Byte-->
-                              <NonSerializedField Field="ByteVal" Value="74" Type="Byte" />
+                              <NonSerializedField Field="ByteVal" Value="132" Type="Byte" />
                               <!--Char-->
-                              <NonSerializedField Field="CharVal" Value="邖" Type="Char" />
+                              <NonSerializedField Field="CharVal" Value="烠" Type="Char" />
                               <!--Decimal-->
-                              <NonSerializedField Field="DecimalVal" Value="-1800244978" Type="Decimal" />
+                              <NonSerializedField Field="DecimalVal" Value="-1142069454" Type="Decimal" />
                               <!--Double-->
-                              <NonSerializedField Field="DoubleVal" Value="-792226093" Type="Double" />
+                              <NonSerializedField Field="DoubleVal" Value="590113592" Type="Double" />
                               <!--Enum-->
                               <NonSerializedField Field="EnumVal" Value="C" Type="EnumTest" />
                               <!--Float-->
-                              <NonSerializedField Field="FloatVal" Value="444598816" Type="Single" />
+                              <NonSerializedField Field="FloatVal" Value="1.40858534E+09" Type="Single" />
                               <!--Int-->
-                              <NonSerializedField Field="IntVal" Value="101173208" Type="Int32" />
+                              <NonSerializedField Field="IntVal" Value="837064428" Type="Int32" />
                               <!--Long-->
-                              <NonSerializedField Field="LongVal" Value="-2052823140" Type="Int64" />
+                              <NonSerializedField Field="LongVal" Value="1601313080" Type="Int64" />
                               <!--SByte-->
-                              <NonSerializedField Field="SByteVal" Value="-61" Type="SByte" />
+                              <NonSerializedField Field="SByteVal" Value="37" Type="SByte" />
                               <!--Short-->
-                              <NonSerializedField Field="ShortVal" Value="-26551" Type="Int16" />
+                              <NonSerializedField Field="ShortVal" Value="-4346" Type="Int16" />
                               <!--String-->
-                              <NonSerializedField Field="StringVal" Value="1946356330" Type="String" />
+                              <NonSerializedField Field="StringVal" Value="1421256040" Type="String" />
                               <!--UInt-->
-                              <NonSerializedField Field="UIntVal" Value="1389300296" Type="UInt32" />
+                              <NonSerializedField Field="UIntVal" Value="1089221012" Type="UInt32" />
                               <!--ULong-->
-                              <NonSerializedField Field="ULongVal" Value="731060320" Type="UInt64" />
+                              <NonSerializedField Field="ULongVal" Value="1878635407" Type="UInt64" />
                               <!--UShort-->
-                              <NonSerializedField Field="UShortVal" Value="57935" Type="UInt16" />
+                              <NonSerializedField Field="UShortVal" Value="11984" Type="UInt16" />
                               <!--Asset-->
-                              <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialC.mat" Type="Material" />
+                              <NonSerializedField Field="MaterialVal" Value="Assets/Material/MaterialB.mat" Type="Material" />
                               <!--Serializable-->
                               <SerializableField Field="SerializableVal">
                                 <Object Type="Test_ToXmlOther">
@@ -907,10 +2530,10 @@
                                   <!--Inherit-->
                                   <SerializableField Field="InheritVal">
                                     <Object Type="Test_ToXml">
+                                      <!--Array-->
+                                      <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
                                       <!--List-->
-                                      <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                                        <Object Type="List`1[Test_ToXmlOther]" />
-                                      </NonSerializedField>
+                                      <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
                                       <!--Name-->
                                       <NonSerializedField Field="Name" Type="String" />
                                       <!--Null-->
@@ -971,13 +2594,13 @@
                                     </Object>
                                   </SerializableField>
                                   <!--Int-->
-                                  <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+                                  <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
                                   <!--Parent Field-->
-                                  <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+                                  <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
                                 </Object>
                               </SerializableField>
                               <!--Parent Field-->
-                              <NonSerializedField Field="ParentField" Value="-1588364181" Type="Int32" />
+                              <NonSerializedField Field="ParentField" Value="-1425804034" Type="Int32" />
                             </Object>
                           </SerializableField>
                           <!--This-->
@@ -987,10 +2610,10 @@
                           <!--Inherit-->
                           <SerializableField Field="InheritVal">
                             <Object Type="Test_ToXml">
+                              <!--Array-->
+                              <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
                               <!--List-->
-                              <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                                <Object Type="List`1[Test_ToXmlOther]" />
-                              </NonSerializedField>
+                              <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
                               <!--Name-->
                               <NonSerializedField Field="Name" Type="String" />
                               <!--Null-->
@@ -1051,13 +2674,13 @@
                             </Object>
                           </SerializableField>
                           <!--Int-->
-                          <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+                          <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
                           <!--Parent Field-->
-                          <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+                          <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
                         </Object>
                       </SerializableField>
                       <!--Parent Field-->
-                      <NonSerializedField Field="ParentField" Value="-1588364181" Type="Int32" />
+                      <NonSerializedField Field="ParentField" Value="-1425804034" Type="Int32" />
                     </Object>
                   </SerializableField>
                   <!--This-->
@@ -1067,10 +2690,10 @@
                   <!--Inherit-->
                   <SerializableField Field="InheritVal">
                     <Object Type="Test_ToXml">
+                      <!--Array-->
+                      <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
                       <!--List-->
-                      <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                        <Object Type="List`1[Test_ToXmlOther]" />
-                      </NonSerializedField>
+                      <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
                       <!--Name-->
                       <NonSerializedField Field="Name" Type="String" />
                       <!--Null-->
@@ -1131,13 +2754,13 @@
                     </Object>
                   </SerializableField>
                   <!--Int-->
-                  <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+                  <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
                   <!--Parent Field-->
-                  <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+                  <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
                 </Object>
               </SerializableField>
               <!--Parent Field-->
-              <NonSerializedField Field="ParentField" Value="-1588364181" Type="Int32" />
+              <NonSerializedField Field="ParentField" Value="-1425804034" Type="Int32" />
             </Object>
           </SerializableField>
           <!--This-->
@@ -1147,10 +2770,10 @@
           <!--Inherit-->
           <SerializableField Field="InheritVal">
             <Object Type="Test_ToXml">
+              <!--Array-->
+              <NonSerializedField Field="ArrayVal" Type="Test_ToXmlOther[]" />
               <!--List-->
-              <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]">
-                <Object Type="List`1[Test_ToXmlOther]" />
-              </NonSerializedField>
+              <NonSerializedField Field="ListVal" Type="List`1[Test_ToXmlOther]" />
               <!--Name-->
               <NonSerializedField Field="Name" Type="String" />
               <!--Null-->
@@ -1211,13 +2834,13 @@
             </Object>
           </SerializableField>
           <!--Int-->
-          <NonSerializedField Field="IntVal" Value="-1588364181" Type="Int32" />
+          <NonSerializedField Field="IntVal" Value="-1425804034" Type="Int32" />
           <!--Parent Field-->
-          <NonSerializedField Field="ParentField" Value="1890480321" Type="Int32" />
+          <NonSerializedField Field="ParentField" Value="-522100500" Type="Int32" />
         </Object>
       </SerializableField>
       <!--Parent Field-->
-      <NonSerializedField Field="ParentField" Value="-1588364181" Type="Int32" />
+      <NonSerializedField Field="ParentField" Value="-1425804034" Type="Int32" />
     </Object>
   </ObjectList>
 </Document>

@@ -67,6 +67,7 @@ namespace FrogSerialization
         public const string Const_XmlNameAtt_Reference = "Reference";
         public const string Const_XmlNameAtt_Type = "Type";
         public const string Const_XmlNameAtt_Value = "Value";
+        public const string Const_XmlNameAtt_Count = "Count";
 
         #endregion 属性名称
 
@@ -74,6 +75,7 @@ namespace FrogSerialization
 
         public const string Const_XmlNameOth_Dictionary = "Dictionary";
         public const string Const_XmlNameOth_List = "List";
+        public const string Const_XmlNameOth_Array = "Array";
 
         #endregion 其它名称
 
@@ -630,6 +632,7 @@ namespace FrogSerialization
                 { typeof(ushort), (typeof(ushort), ToXml_UShort, FromXml_UShort) },
                 { typeof(UnityEngine.Object), (typeof(UnityEngine.Object), ToXml_Asset, FromXml_Asset) },
                 { typeof(IList), (typeof(IList), ToXml_List, FromXml_List) },
+                { typeof(Array), (typeof(Array), ToXml_Array, FromXml_Array) },
             };
 
         #endregion 字段
@@ -1627,6 +1630,13 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_Asset(XmlWriteHelper helper, FieldInfo field, object val)
         {
+            if (val == null)
+            {
+                return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                   field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
+                   ToXml_TypeSimple(helper, field.FieldType)
+                   );
+            }
             if (!(val is UnityEngine.Object obj))
             {
                 throw new Exception("错误的资源类型");
@@ -1653,68 +1663,118 @@ namespace FrogSerialization
             {
                 string fieldName = fieldAtt.Value;
                 FieldInfo field = obj.GetType().GetField(fieldName);
-                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-                UnityEngine.Object asset = AssetDatabase.LoadMainAssetAtPath(valAtt.Value);
-                field.SetValue(obj, asset);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value, true, true);
+                if (valAtt == null)
+                {
+                    field.SetValue(obj, null);
+                }
+                else
+                {
+                    UnityEngine.Object asset = AssetDatabase.LoadMainAssetAtPath(valAtt.Value);
+                    field.SetValue(obj, asset);
+                }
             }
             else
             {
-                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
-                obj = AssetDatabase.LoadMainAssetAtPath(valAtt.Value);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value, true, true);
+                obj = valAtt == null ? null : AssetDatabase.LoadMainAssetAtPath(valAtt.Value);
             }
         }
 
         #endregion Asset
 
-        //#region Array
+        #region Array
 
-        ///// <summary>
-        ///// 序列化字段(Array)
-        ///// </summary>
-        ///// <param name="helper">助手</param>
-        ///// <param name="field">字段</param>
-        ///// <param name="val">值</param>
-        ///// <returns>Xml数据</returns>
-        //private static XElement ToXml_Array(XmlWriteHelper helper, FieldInfo field, object val)
-        //{
-        //    if (!val.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(Array)))
-        //    {
-        //        throw new Exception("错误的数组类型");
-        //    }
-        //    Array array = val as Array;
-        //    XElement element = ToXml_Object(helper, val);
-        //    foreach (var item in array)
-        //    {
-        //        element.Add(SerializeWithHelper(helper, item));
-        //    }
+        /// <summary>
+        /// 序列化字段(Array)
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="field">字段</param>
+        /// <param name="val">值</param>
+        /// <returns>Xml数据</returns>
+        private static XElement ToXml_Array(XmlWriteHelper helper, FieldInfo field, object val)
+        {
+            if (val == null)
+            {
+                return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                    field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
+                    ToXml_TypeSimple(helper, field.FieldType)
+                    );
+            }
+            if (!(val is Array array))
+            {
+                throw new Exception("错误的Array类型");
+            }
+            XElement element = ToXml_Object(helper, val);
+            XAttribute countAtt = GenerateXAttribute(Const_XmlNameAtt_Count, array.Length);
+            element.Add(countAtt);
+            int index = 1;
+            foreach (object child in array)
+            {
+                helper.PushName(XName.Get(Const_XmlNameOth_Array, index.ToString()));
+                element.Add(helper.GetValueXml(child));
+                helper.PopName();
+                index++;
+            }
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
+                element,
+                ToXml_TypeSimple(helper, field.FieldType)
+                );
+        }
 
-        //    return element;
-        //}
+        /// <summary>
+        /// 创建Array对象
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="xml">Xml数据</param>
+        /// <returns>List对象</returns>
+        private static object FromXml_ArrayCreate(XmlReadHelper helper, XElement xml)
+        {
+            XAttribute countAtt = GetXAttribute(xml, Const_XmlNameAtt_Count);
+            Array array = FromXml_Object(helper, xml, (int)countAtt) as Array;
+            if (array == null)
+            {
+                throw new Exception("数据不是Array类型");
+            }
+            IEnumerable<XElement> childrenXml = GetXElements(xml, Const_XmlNameEle_Object);
+            int index = 1;
+            foreach (XElement childXml in childrenXml)
+            {
+                helper.PushName(XName.Get(Const_XmlNameOth_Array, index.ToString()));
+                object child = null;
+                helper.GetXmlValue(childXml, ref child);
+                array.SetValue(child, index - 1);
+                helper.PopName();
+                index++;
+            }
+            return array;
+        }
 
-        ///// <summary>
-        ///// 反序列化字段(Array)
-        ///// </summary>
-        ///// <param name="helper">助手</param>
-        ///// <param name="xml">Xml数据</param>
-        ///// <param name="obj">字段所属对象</param>
-        ///// <returns>Xml数据</returns>
-        //private static void FromXml_Array(XmlReadHelper helper, XElement xml, ref object obj)
-        //{
-        //    Array  array = FromXml_Object(helper, xml) as Array;
+        /// <summary>
+        /// 反序列化字段(Array)
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="xml">Xml数据</param>
+        /// <param name="obj">字段所属对象</param>
+        /// <returns>Xml数据</returns>
+        private static void FromXml_Array(XmlReadHelper helper, XElement xml, ref object obj)
+        {
+            XAttribute fieldAtt = GetXAttribute(xml, Const_XmlNameAtt_Field, true, true);
+            XElement arrayXml = GetXElement(xml, Const_XmlNameEle_Object, true, true);
+            if (fieldAtt != null)
+            {
+                string fieldName = fieldAtt.Value;
+                FieldInfo field = obj.GetType().GetField(fieldName);
+                field.SetValue(obj, arrayXml == null ? null : FromXml_ArrayCreate(helper, arrayXml));
+            }
+            else
+            {
+                obj = arrayXml == null ? null : FromXml_ArrayCreate(helper, arrayXml);
+            }
+        }
 
-        //    IEnumerable<XElement> elements = GetXElements(xml, Const_XmlNameEle_Object);
-
-        //    foreach (var item in elements)
-        //    {
-        //        object chlid = DeserializeWithHelper(helper, item);
-        //        array.
-        //    }
-        //    string fieldName = GetXAttribute(xml, Const_XmlNameAtt_Field).Value;
-        //    FieldInfo field = obj.GetType().GetField(fieldName);
-        //    field.SetValue(obj, array);
-        //}
-
-        //#endregion Array
+        #endregion Array
 
         #region List
 
@@ -1727,6 +1787,13 @@ namespace FrogSerialization
         /// <returns>Xml数据</returns>
         private static XElement ToXml_List(XmlWriteHelper helper, FieldInfo field, object val)
         {
+            if (val == null)
+            {
+                return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                    field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
+                    ToXml_TypeSimple(helper, field.FieldType)
+                    );
+            }
             if (!(val is IList list))
             {
                 throw new Exception("错误的List类型");
@@ -1784,16 +1851,16 @@ namespace FrogSerialization
         private static void FromXml_List(XmlReadHelper helper, XElement xml, ref object obj)
         {
             XAttribute fieldAtt = GetXAttribute(xml, Const_XmlNameAtt_Field, true, true);
-            XElement listXml = GetXElement(xml, Const_XmlNameEle_Object);
+            XElement listXml = GetXElement(xml, Const_XmlNameEle_Object, true, true);
             if (fieldAtt != null)
             {
                 string fieldName = fieldAtt.Value;
                 FieldInfo field = obj.GetType().GetField(fieldName);
-                field.SetValue(obj, FromXml_ListCreate(helper, listXml));
+                field.SetValue(obj, listXml == null ? null : FromXml_ListCreate(helper, listXml));
             }
             else
             {
-                obj = FromXml_ListCreate(helper, listXml);
+                obj = listXml == null ? null : FromXml_ListCreate(helper, listXml);
             }
         }
 
@@ -2214,14 +2281,15 @@ namespace FrogSerialization
         /// </summary>
         /// <param name="helper">助手</param>
         /// <param name="xml">配置数据</param>
+        /// <param name="args">构造函数参数</param>
         /// <returns>实例对象</returns>
-        private static object FromXml_Object(XmlReadHelper helper, XElement xml)
+        private static object FromXml_Object(XmlReadHelper helper, XElement xml, params object[] args)
         {
             if (xml.Name == Const_XmlNameEle_Null) return null;
             CheckXelementName(xml, Const_XmlNameEle_Object);
             XAttribute typeXML = GetXAttribute(xml, Const_XmlNameAtt_Type);
             Type type = FromXml_TypeSimple(helper, typeXML);
-            return Activator.CreateInstance(type, Const_NoElementObjectArray); ;
+            return Activator.CreateInstance(type, args == null ? Const_NoElementObjectArray : args);
         }
 
         #endregion Object
