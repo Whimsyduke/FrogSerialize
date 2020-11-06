@@ -800,6 +800,11 @@ namespace FrogSerialization
 
         #region 字段
 
+        /// <summary>
+        /// 测试实例
+        /// </summary>
+        private static Test_ToXml TestInstance;
+
         #endregion 字段
 
         #region 事件
@@ -809,6 +814,31 @@ namespace FrogSerialization
         #endregion 属性字段
 
         #region 构造函数
+
+        /// <summary>
+        /// 静态构造函数
+        /// </summary>
+        static Const_TestEditorTool_Tester()
+        {
+            TestInstance = new Test_ToXml
+            {
+                Name = "A"
+            };
+            TestInstance.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "B"
+            };
+            TestInstance.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "C"
+            };
+            TestInstance.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "D"
+            };
+            TestInstance.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = TestInstance.SerializableVal.OtherVal;
+            TestInstance.RandomField();
+        }
 
         #endregion 构造函数
 
@@ -822,36 +852,63 @@ namespace FrogSerialization
         [MenuItem("蛤序列化系统/自测试", false, 1)]
         public static void TestSystem()
         {
-            Test_ToXml tester = new Test_ToXml
-            {
-                Name = "A"
-            };
-            tester.SerializableVal.OtherVal = new Test_ToXml
-            {
-                Name = "B"
-            };
-            tester.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
-            {
-                Name = "C"
-            };
-            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
-            {
-                Name = "D"
-            };
-            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = tester.SerializableVal.OtherVal;
-            tester.RandomField();
-            XElement element = FrogSerialization.Serialize(tester);
+            XElement element = FrogSerialization.Serialize(TestInstance);
             element.Save("Log.log");
             object result = null;
             FrogSerialization.Deserialize(element, ref result);
-            if (!tester.ValueEqual(result as Test_ToXml, new List<Test_ToXmlBase>()))
+            if (!TestInstance.ValueEqual(result as Test_ToXml, new List<Test_ToXmlBase>()))
             {
                 throw new Exception("反序列化生成结果异常");
             }
             Test_ToXml copy = new Test_ToXml();
             result = copy;
             FrogSerialization.Deserialize(element, ref result);
-            if (!tester.ValueEqual(result as Test_ToXml, new List<Test_ToXmlBase>()))
+            if (!TestInstance.ValueEqual(result as Test_ToXml, new List<Test_ToXmlBase>()))
+            {
+                throw new Exception("反序列化修改结果异常");
+            }
+            EditorUtility.DisplayDialog("消息", "测试完成", "确定");
+        }
+
+        /// <summary>
+        /// 系统测试
+        /// </summary>
+        [MenuItem("蛤序列化系统/保存", false, 1)]
+        public static void TestSave()
+        {
+            XElement element = FrogSerialization.Serialize(TestInstance);
+            string path = EditorUtility.SaveFilePanel("保存配置", Application.dataPath, "config.cfg", "cfg");
+            if (string.IsNullOrEmpty(path))
+            {
+                EditorUtility.DisplayDialog("消息", "保存取消", "确定");
+                return;
+            }
+            element.Save(path);
+        }
+
+        /// <summary>
+        /// 系统测试
+        /// </summary>
+        [MenuItem("蛤序列化系统/读取并测试", false, 1)]
+        public static void TestLoad()
+        {
+            string path = EditorUtility.OpenFilePanel("读取配置", Application.dataPath, "cfg" );
+            if (string.IsNullOrEmpty(path))
+            {
+                EditorUtility.DisplayDialog("消息", "打开取消", "确定");
+                return;
+            }
+            XElement element = XElement.Load(path);
+            object result = null;
+            FrogSerialization.Deserialize(element, ref result);
+            if (!TestInstance.ValueEqual(result as Test_ToXml, new List<Test_ToXmlBase>()))
+            {
+                throw new Exception("反序列化生成结果异常");
+            }
+            Test_ToXml copy = new Test_ToXml();
+            result = copy;
+            FrogSerialization.Deserialize(element, ref result);
+            if (!TestInstance.ValueEqual(result as Test_ToXml, new List<Test_ToXmlBase>()))
             {
                 throw new Exception("反序列化修改结果异常");
             }
