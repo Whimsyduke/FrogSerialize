@@ -172,25 +172,15 @@ namespace FrogSerialization
 
             #region 测试字段
 
-            #region Array
+            #region Dictionary
 
             /// <summary>
             /// 列表Val
             /// </summary>
-            [FrogSerializable(Comment = "Array")]
-            public Test_ToXmlOther [] ArrayVal;
+            [FrogSerializable(Comment = "Dictionary")]
+            public Dictionary<int, Test_ToXmlOther> DictionaryVal;
 
-            #endregion Array
-
-            #region List
-
-            /// <summary>
-            /// 列表Val
-            /// </summary>
-            [FrogSerializable(Comment = "List")]
-            public List<Test_ToXmlOther> ListVal;
-
-            #endregion List
+            #endregion Dictionary
 
             #region Name
 
@@ -474,6 +464,26 @@ namespace FrogSerialization
 
             #endregion Serializable
 
+            #region Array
+
+            /// <summary>
+            /// 列表Val
+            /// </summary>
+            [FrogSerializable(Comment = "Array")]
+            public Test_ToXmlOther[] ArrayVal;
+
+            #endregion Array
+
+            #region List
+
+            /// <summary>
+            /// 列表Val
+            /// </summary>
+            [FrogSerializable(Comment = "List")]
+            public List<Test_ToXmlOther> ListVal;
+
+            #endregion List
+
             #region 不序列化属性
 
             /// <summary>
@@ -540,6 +550,12 @@ namespace FrogSerialization
                     ListVal.Add(new Test_ToXmlOther());
                     ListVal[i].RandomField();
                 }
+                DictionaryVal = new Dictionary<int, Test_ToXmlOther>();
+                for (int i = 0; i < random.Next(2, 6); i++)
+                {
+                    DictionaryVal.Add(i, new Test_ToXmlOther());
+                    DictionaryVal[i].RandomField();
+                }
             }
 
             /// <summary>
@@ -583,6 +599,12 @@ namespace FrogSerialization
                 {
                     if (!ListVal[i].ValueEqual(tester.ListVal[i], listHasTest)) 
                         throw new Exception($"{nameof(ListVal)}[{i}] count is not equal!");
+                }
+                if (DictionaryVal.Count != tester.DictionaryVal.Count) throw new Exception($"{nameof(DictionaryVal)} count is not equal!");
+                for (int i = 0; i < DictionaryVal.Count; i++)
+                {
+                    if (!DictionaryVal[i].ValueEqual(tester.DictionaryVal[i], listHasTest))
+                        throw new Exception($"{nameof(DictionaryVal)}[{i}] count is not equal!");
                 }
                 return true;
             }
