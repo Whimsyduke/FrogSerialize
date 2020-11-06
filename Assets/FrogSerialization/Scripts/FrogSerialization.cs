@@ -1118,7 +1118,7 @@ namespace FrogSerialization
             {
                 Type type = val.GetType();
                 Type baseType = GetBaseSerializeType(type);
-                element.Add(mListSerializeFunc[type].SerializeFunc(helper, null, val));
+                element.Add(mListSerializeFunc[baseType].SerializeFunc(helper, null, val));
             }
             return element;
         }

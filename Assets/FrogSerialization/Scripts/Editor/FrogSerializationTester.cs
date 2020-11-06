@@ -47,7 +47,7 @@ namespace FrogSerialization
         /// <summary>
         /// 测试类基础
         /// </summary>
-        public abstract class Test_ToXmlBase
+        private abstract class Test_ToXmlBase
         {
             #region 内部声明
 
@@ -131,15 +131,15 @@ namespace FrogSerialization
         /// <summary>
         /// 测试类继承
         /// </summary>
-        public class Test_ToXml : Test_ToXmlBase
+        private class Test_ToXml : Test_ToXmlBase
         {
             #region 内部声明
 
             #region 常量
 
-            private const string Const_PathMaterialA = "Assets/Material/MaterialA.mat";
-            private const string Const_PathMaterialB = "Assets/Material/MaterialB.mat";
-            private const string Const_PathMaterialC = "Assets/Material/MaterialC.mat";
+            private const string Const_PathMaterialA = "Assets/FrogSerialization/Material/MaterialA.mat";
+            private const string Const_PathMaterialB = "Assets/FrogSerialization/Material/MaterialB.mat";
+            private const string Const_PathMaterialC = "Assets/FrogSerialization/Material/MaterialC.mat";
 
             #endregion 常量
 
@@ -624,7 +624,7 @@ namespace FrogSerialization
         /// <summary>
         /// 测试类其它
         /// </summary>
-        public class Test_ToXmlOther : Test_ToXmlBase
+        private class Test_ToXmlOther : Test_ToXmlBase
         {
             #region 内部声明
 
