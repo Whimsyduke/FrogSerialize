@@ -217,6 +217,15 @@ namespace FrogSerialization
                 StackCurrentPath.Pop();
             }
 
+            /// <summary>
+            /// 最后的名称
+            /// </summary>
+            /// <returns></returns>
+            public string PeekName()
+            {
+                return StackCurrentPath.Peek();
+            }
+
             #endregion 通用方法
 
             #region 重写方法
@@ -605,6 +614,16 @@ namespace FrogSerialization
 
         #region 属性
 
+        /// <summary>
+        /// 打印路径注释
+        /// </summary>
+        public static bool PrintCommentPath { set; get; } = false;
+
+        /// <summary>
+        /// 打印自定义注释
+        /// </summary>
+        public static bool PrintCustomPath { set; get; } = true;
+
         #endregion 属性
 
         #region 字段
@@ -662,6 +681,8 @@ namespace FrogSerialization
         /// 可序列化类型将会序列化其带有<see cref="FrogSerializableAttribute"/>特性的字段。并需要支持无参数<see cref="Activator.CreateInstance(Type, object[])"/>创建实例。
         /// 对于支持<see cref="List{T}"/>，<see cref="Dictionary{TKey, TValue}"/>，以及一维数组（支持交错数组）。对于其中元素的处理方式如上。
         /// 如实现了继承<see cref="List{T}"/>或<see cref="Dictionary{TKey, TValue}"/>的类，请自行添加处理方法，参考<see cref="mListSerializeFunc"/>的列表数据。
+        /// 可以通过设置<see cref="PrintCommentPath"/>来决定是否打印数据的内部路径（用于同一序列化类型对象的位置的标记），默认为False。
+        /// 可以通过<see cref="PrintCustomPath"/>来决定是否打印自定义注释，自定义注释通过<see cref="FrogSerializableAttribute.Comment"/>属性添加。默认为True。
         /// </summary>
         /// <param name="obj">对象</param>
         /// <returns>Xml数据</returns>
@@ -751,8 +772,16 @@ namespace FrogSerialization
                     foreach (var item in dict)
                     {
                         helper.PushName(item.Value.Field.Name);
-                        XComment comment = new XComment(item.Value.Comment);
-                        element.Add(comment);
+                        if (PrintCommentPath)
+                        {
+                            XComment comment = new XComment($"路径：{helper.PeekName()}");
+                            element.Add(comment);
+                        }
+                        if (PrintCustomPath)
+                        {
+                            XComment comment = new XComment($"注释：{item.Value.Comment}");
+                            element.Add(comment);
+                        }
                         object val = item.Value.Field.GetValue(obj);
                         if (IsSerializableType(item.Value.Field.FieldType))
                         {
@@ -1711,7 +1740,13 @@ namespace FrogSerialization
             int index = 1;
             foreach (object child in array)
             {
-                helper.PushName(XName.Get(Const_XmlNameOth_Array, index.ToString()));
+                XName name = XName.Get(Const_XmlNameOth_Array, index.ToString());
+                helper.PushName(name);
+                if (PrintCommentPath)
+                {
+                    XComment comment = new XComment($"路径：{helper.PeekName()}");
+                    element.Add(comment);
+                }
                 element.Add(helper.GetValueXml(child));
                 helper.PopName();
                 index++;
@@ -1802,7 +1837,13 @@ namespace FrogSerialization
             int index = 1;
             foreach (object child in list)
             {
-                helper.PushName(XName.Get(Const_XmlNameOth_List, index.ToString()));
+                XName name = XName.Get(Const_XmlNameOth_List, index.ToString());
+                helper.PushName(name);
+                if (PrintCommentPath)
+                {
+                    XComment comment = new XComment($"路径：{helper.PeekName()}");
+                    element.Add(comment);
+                }
                 element.Add(helper.GetValueXml(child));
                 helper.PopName();
                 index++;
