@@ -48,7 +48,7 @@ namespace FrogSerialization
         /// <summary>
         /// 测试类基础
         /// </summary>
-        public abstract class Test_ToXmlBase
+        private abstract class Test_ToXmlBase
         {
             #region 内部声明
 
@@ -132,15 +132,15 @@ namespace FrogSerialization
         /// <summary>
         /// 测试类继承
         /// </summary>
-        public class Test_ToXml : Test_ToXmlBase
+        private class Test_ToXml : Test_ToXmlBase
         {
             #region 内部声明
 
             #region 常量
 
-            private const string Const_PathMaterialA = "Assets/Material/MaterialA.mat";
-            private const string Const_PathMaterialB = "Assets/Material/MaterialB.mat";
-            private const string Const_PathMaterialC = "Assets/Material/MaterialC.mat";
+            private const string Const_PathMaterialA = "Assets/FrogSerialization/Material/MaterialA.mat";
+            private const string Const_PathMaterialB = "Assets/FrogSerialization/Material/MaterialB.mat";
+            private const string Const_PathMaterialC = "Assets/FrogSerialization/Material/MaterialC.mat";
 
             #endregion 常量
 
@@ -625,7 +625,7 @@ namespace FrogSerialization
         /// <summary>
         /// 测试类其它
         /// </summary>
-        public class Test_ToXmlOther : Test_ToXmlBase
+        private class Test_ToXmlOther : Test_ToXmlBase
         {
             #region 内部声明
 
@@ -823,14 +823,22 @@ namespace FrogSerialization
         [MenuItem("蛤序列化系统/自测试", false, 1)]
         public static void TestSystem()
         {
-            Test_ToXml tester = new Test_ToXml();
-            tester.Name = "A";
-            tester.SerializableVal.OtherVal = new Test_ToXml();
-            tester.SerializableVal.OtherVal.Name = "B";
-            tester.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml();
-            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.Name = "C";
-            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml();
-            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal.Name = "D";
+            Test_ToXml tester = new Test_ToXml
+            {
+                Name = "A"
+            };
+            tester.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "B"
+            };
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "C"
+            };
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "D"
+            };
             tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = tester.SerializableVal.OtherVal;
             tester.RandomField();
             XElement element = FrogSerialization.Serialize(tester);

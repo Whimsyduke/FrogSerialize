@@ -738,7 +738,7 @@ namespace FrogSerialization
             {
                 Type type = val.GetType();
                 Type baseType = GetBaseSerializeType(type);
-                element.Add(mListSerializeFunc[type].SerializeFunc(helper, null, val));
+                element.Add(mListSerializeFunc[baseType].SerializeFunc(helper, null, val));
             }
             return element;
         }
@@ -904,7 +904,7 @@ namespace FrogSerialization
         /// </summary>
         /// <param name="type">处理类型</param>
         /// <returns>处理结果</returns>
-        public static IDictionary<string, (FieldInfo Field, string Comment)> GetSerializableFields(Type type)
+        private static IDictionary<string, (FieldInfo Field, string Comment)> GetSerializableFields(Type type)
         {
             List<FieldInfo> fields = type.GetFields().ToList().Where(r => r.IsDefined(typeof(FrogSerializableAttribute), true)).ToList();
             Dictionary<string, (FieldInfo Field, string Comment)> dict = new Dictionary<string, (FieldInfo Field, string Comment)>();
