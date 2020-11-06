@@ -801,10 +801,6 @@ namespace FrogSerialization
         [MenuItem("蛤序列化系统/自测试", false, 1)]
         public static void TestSystem()
         {
-            Test_ToXmlOther[] array = new Test_ToXmlOther[3];
-            Type type = array.GetType();
-            object newArray = Activator.CreateInstance(type, 3);
-
             Test_ToXml tester = new Test_ToXml();
             tester.Name = "A";
             tester.SerializableVal.OtherVal = new Test_ToXml();
