@@ -171,16 +171,6 @@ namespace FrogSerialization
 
             #region 测试字段
 
-            #region Dictionary
-
-            /// <summary>
-            /// 列表Val
-            /// </summary>
-            [FrogSerializable(Comment = "Dictionary")]
-            public Dictionary<int, Test_ToXmlOther> DictionaryVal;
-
-            #endregion Dictionary
-
             #region Name
 
             /// <summary>
@@ -438,6 +428,46 @@ namespace FrogSerialization
 
             #endregion UShort
 
+            #region Vector2
+
+            /// <summary>
+            /// Vector2字段
+            /// </summary>
+            [FrogSerializable(Comment = "Vector2")]
+            public Vector2 Vector2Val = new Vector2(1024, 10.24f);
+
+            #endregion Vector2
+
+            #region Vector3
+
+            /// <summary>
+            /// Vector3字段
+            /// </summary>
+            [FrogSerializable(Comment = "Vector3")]
+            public Vector3 Vector3Val = new Vector3(1024, 10.24f, 1.024f);
+
+            #endregion Vector3
+
+            #region Vector4
+
+            /// <summary>
+            /// Vector4字段
+            /// </summary>
+            [FrogSerializable(Comment = "Vector4")]
+            public Vector4 Vector4Val = new Vector4(1024, 10.24f, 1.024f, 0.124f);
+
+            #endregion Vector4
+
+            #region Quaternion
+
+            /// <summary>
+            /// Quaternion字段
+            /// </summary>
+            [FrogSerializable(Comment = "Quaternion")]
+            public Quaternion QuaternionVal = new Quaternion(1024, 10.24f, 1.024f, 0.124f);
+
+            #endregion Quaternion
+
             #region Asset
 
             /// <summary>
@@ -482,6 +512,16 @@ namespace FrogSerialization
             public List<Test_ToXmlOther> ListVal;
 
             #endregion List
+
+            #region Dictionary
+
+            /// <summary>
+            /// 列表Val
+            /// </summary>
+            [FrogSerializable(Comment = "Dictionary")]
+            public Dictionary<int, Test_ToXmlOther> DictionaryVal;
+
+            #endregion Dictionary
 
             #region 不序列化属性
 
@@ -534,6 +574,10 @@ namespace FrogSerialization
                 UIntVal = (uint)random.Next(0, int.MaxValue);
                 ULongVal = (ulong)random.Next(0, int.MaxValue);
                 UShortVal = (ushort)random.Next(ushort.MinValue, ushort.MaxValue);
+                Vector2Val = new Vector2((float)random.NextDouble(), (float)random.NextDouble());
+                Vector3Val = new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
+                Vector4Val = new Vector4((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
+                QuaternionVal = new Quaternion((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
                 MaterialVal = AssetDatabase.LoadMainAssetAtPath(random.Next(0, 2) == 0? Const_PathMaterialB : Const_PathMaterialC) as Material;
                 NonSerializedInt = random.Next(int.MinValue, IntValDefault);
                 SerializableVal.RandomField();
@@ -584,6 +628,10 @@ namespace FrogSerialization
                 if (UIntVal != tester.UIntVal) throw new Exception("UIntVal is not equal!");
                 if (ULongVal != tester.ULongVal) throw new Exception("ULongVal is not equal!");
                 if (UShortVal != tester.UShortVal) throw new Exception("UShortVal is not equal!");
+                if (Vector2Val != tester.Vector2Val) throw new Exception("Vector2Val is not equal!");
+                if (Vector3Val != tester.Vector3Val) throw new Exception("Vector3Val is not equal!");
+                if (Vector4Val != tester.Vector4Val) throw new Exception("Vector4Val is not equal!");
+                if (QuaternionVal != tester.QuaternionVal) throw new Exception("QuaternionVal is not equal!");
                 if (MaterialVal.color != tester.MaterialVal.color) throw new Exception("MaterialVal is not equal!");
                 if (NonSerializedInt == tester.NonSerializedInt) throw new Exception("NonSerializedInt is not equal!");
                 if (!(SerializableVal).ValueEqual(tester.SerializableVal, listHasTest)) throw new Exception("SerializableVal is not equal!");
@@ -803,7 +851,7 @@ namespace FrogSerialization
         /// <summary>
         /// 测试实例
         /// </summary>
-        private static Test_ToXml TestInstance;
+        private static readonly Test_ToXml TestInstance = InitTestEditorToolTester();
 
         #endregion 字段
 
@@ -815,36 +863,38 @@ namespace FrogSerialization
 
         #region 构造函数
 
-        /// <summary>
-        /// 静态构造函数
-        /// </summary>
-        static Const_TestEditorTool_Tester()
-        {
-            TestInstance = new Test_ToXml
-            {
-                Name = "A"
-            };
-            TestInstance.SerializableVal.OtherVal = new Test_ToXml
-            {
-                Name = "B"
-            };
-            TestInstance.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
-            {
-                Name = "C"
-            };
-            TestInstance.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
-            {
-                Name = "D"
-            };
-            TestInstance.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = TestInstance.SerializableVal.OtherVal;
-            TestInstance.RandomField();
-        }
-
         #endregion 构造函数
 
         #region 方法
 
         #region 通用方法
+
+        /// <summary>
+        /// 静态构造函数
+        /// </summary>
+        private static Test_ToXml InitTestEditorToolTester()
+        {
+            Test_ToXml tester;
+            tester = new Test_ToXml
+            {
+                Name = "A"
+            };
+            tester.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "B"
+            };
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "C"
+            };
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = new Test_ToXml
+            {
+                Name = "D"
+            };
+            tester.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal.SerializableVal.OtherVal = tester.SerializableVal.OtherVal;
+            tester.RandomField();
+            return tester;
+        }
 
         /// <summary>
         /// 系统测试

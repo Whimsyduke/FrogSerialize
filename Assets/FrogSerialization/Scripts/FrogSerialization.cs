@@ -92,6 +92,11 @@ namespace FrogSerialization
         /// </summary>
         public static readonly object[] Const_NoElementObjectArray = new object[] { };
 
+        /// <summary>
+        /// 多值分隔符
+        /// </summary>
+        public static readonly string[] Const_InspectorForValues = new string[] { ", " };
+
         #endregion 公共默认参数
 
         #region 素材类型
@@ -1029,6 +1034,10 @@ namespace FrogSerialization
                 { typeof(uint), new SerializationMethod(typeof(uint), ToXml_UInt, FromXml_UInt, Type_GetBaseUInt) },
                 { typeof(ulong), new SerializationMethod(typeof(ulong), ToXml_ULong, FromXml_ULong, Type_GetBaseULong) },
                 { typeof(ushort), new SerializationMethod(typeof(ushort), ToXml_UShort, FromXml_UShort, Type_GetBaseUShort) },
+                { typeof(Vector2), new SerializationMethod(typeof(Vector2), ToXml_Vector2, FromXml_Vector2, Type_GetBaseVector2) },
+                { typeof(Vector3), new SerializationMethod(typeof(Vector3), ToXml_Vector3, FromXml_Vector3, Type_GetBaseVector3) },
+                { typeof(Vector4), new SerializationMethod(typeof(Vector4), ToXml_Vector4, FromXml_Vector4, Type_GetBaseVector4) },
+                { typeof(Quaternion), new SerializationMethod(typeof(Quaternion), ToXml_Quaternion, FromXml_Quaternion, Type_GetBaseQuaternion) },
                 { typeof(UnityEngine.Object), new SerializationMethod(typeof(UnityEngine.Object), ToXml_Asset, FromXml_Asset, Type_GetBaseAsset) },
                 { typeof(Array), new SerializationMethod(typeof(Array), ToXml_Array, FromXml_Array, Type_GetBaseArray) },
                 { typeof(IList), new SerializationMethod(typeof(IList), ToXml_List, FromXml_List, Type_GetBaseList) },
@@ -2115,6 +2124,326 @@ namespace FrogSerialization
         }
 
         #endregion UShort
+
+        #region Vector2
+
+        /// <summary>
+        /// 转为字符串(Vector2)
+        /// </summary>
+        /// <param name="val">值</param>
+        /// <returns>文本内容</returns>
+        private static string ToXml_ToStringVector2(object val)
+        {
+            Vector2 value = (Vector2)val;
+            return value.x.ToString() + ", " + value.y.ToString();
+        }
+
+        /// <summary>
+        /// 解析字符串
+        /// </summary>
+        /// <param name="val">文本内容</param>
+        /// <returns>值</returns>
+        private static Vector2 FromXml_ParseVector2(string val)
+        {
+            string[] values = val.Split(Const_InspectorForValues, StringSplitOptions.RemoveEmptyEntries).Select(r => r.Trim()).ToArray();
+            if (values.Length != 2)
+            {
+                throw new Exception("值数量不匹配Vector2");
+            }
+            return new Vector2(float.Parse(values[0]), float.Parse(values[1]));
+        }
+
+        /// <summary>
+        /// 序列化字段(Vector2)
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="field">字段</param>
+        /// <param name="val">值</param>
+        /// <returns>Xml数据</returns>
+        private static XElement ToXml_Vector2(XmlWriteHelper helper, FieldInfo field, object val)
+        {
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
+                GenerateXAttribute(Const_XmlNameAtt_Value, ToXml_ToStringVector2(val)),
+                ToXml_TypeSimple(helper, field != null ? field.FieldType : val.GetType())
+                );
+        }
+
+        /// <summary>
+        /// 反序列化字段(Vector2)
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="xml">Xml数据</param>
+        /// <param name="val">字段所属对象</param>
+        /// <returns>Xml数据</returns>
+        private static void FromXml_Vector2(XmlReadHelper helper, XElement xml, ref object val)
+        {
+            XAttribute fieldAtt = GetXAttribute(xml, Const_XmlNameAtt_Field, true, true);
+            if (fieldAtt != null)
+            {
+                string fieldName = fieldAtt.Value;
+                FieldInfo field = val.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(val, FromXml_ParseVector2(valAtt.Value));
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                val = FromXml_ParseVector2(valAtt.Value);
+            }
+        }
+
+        /// <summary>
+        /// 获取基本类型Vector2
+        /// </summary>
+        /// <param name="type">字段所属对象</param>
+        /// <returns>基础类型</returns>
+        private static Type Type_GetBaseVector2(Type type)
+        {
+            return type == typeof(Vector2) ? type : null;
+        }
+
+        #endregion Vector2
+
+        #region Vector3
+
+        /// <summary>
+        /// 转为字符串(Vector3)
+        /// </summary>
+        /// <param name="val">值</param>
+        /// <returns>文本内容</returns>
+        private static string ToXml_ToStringVector3(object val)
+        {
+            Vector3 value = (Vector3)val;
+            return value.x.ToString() + ", " + value.y.ToString() + ", " + value.z.ToString();
+        }
+
+        /// <summary>
+        /// 解析字符串
+        /// </summary>
+        /// <param name="val">文本内容</param>
+        /// <returns>值</returns>
+        private static Vector3 FromXml_ParseVector3(string val)
+        {
+            string[] values = val.Split(Const_InspectorForValues, StringSplitOptions.RemoveEmptyEntries).Select(r => r.Trim()).ToArray();
+            if (values.Length != 3)
+            {
+                throw new Exception("值数量不匹配Vector3");
+            }
+            return new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
+        }
+
+        /// <summary>
+        /// 序列化字段(Vector3)
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="field">字段</param>
+        /// <param name="val">值</param>
+        /// <returns>Xml数据</returns>
+        private static XElement ToXml_Vector3(XmlWriteHelper helper, FieldInfo field, object val)
+        {
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
+                GenerateXAttribute(Const_XmlNameAtt_Value, ToXml_ToStringVector3(val)),
+                ToXml_TypeSimple(helper, field != null ? field.FieldType : val.GetType())
+                );
+        }
+
+        /// <summary>
+        /// 反序列化字段(Vector3)
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="xml">Xml数据</param>
+        /// <param name="val">字段所属对象</param>
+        /// <returns>Xml数据</returns>
+        private static void FromXml_Vector3(XmlReadHelper helper, XElement xml, ref object val)
+        {
+            XAttribute fieldAtt = GetXAttribute(xml, Const_XmlNameAtt_Field, true, true);
+            if (fieldAtt != null)
+            {
+                string fieldName = fieldAtt.Value;
+                FieldInfo field = val.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(val, FromXml_ParseVector3(valAtt.Value));
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                val = FromXml_ParseVector3(valAtt.Value);
+            }
+        }
+
+        /// <summary>
+        /// 获取基本类型Vector3
+        /// </summary>
+        /// <param name="type">字段所属对象</param>
+        /// <returns>基础类型</returns>
+        private static Type Type_GetBaseVector3(Type type)
+        {
+            return type == typeof(Vector3) ? type : null;
+        }
+
+        #endregion Vector3
+
+        #region Vector4
+
+        /// <summary>
+        /// 转为字符串(Vector4)
+        /// </summary>
+        /// <param name="val">值</param>
+        /// <returns>文本内容</returns>
+        private static string ToXml_ToStringVector4(object val)
+        {
+            Vector4 value = (Vector4)val;
+            return value.x.ToString() + ", " + value.y.ToString() + ", " + value.z.ToString() + ", " + value.w.ToString();
+        }
+
+        /// <summary>
+        /// 解析字符串
+        /// </summary>
+        /// <param name="val">文本内容</param>
+        /// <returns>值</returns>
+        private static Vector4 FromXml_ParseVector4(string val)
+        {
+            string[] values = val.Split(Const_InspectorForValues, StringSplitOptions.RemoveEmptyEntries).Select(r => r.Trim()).ToArray();
+            if (values.Length != 4)
+            {
+                throw new Exception("值数量不匹配Vector4");
+            }
+            return new Vector4(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+        }
+
+        /// <summary>
+        /// 序列化字段(Vector4)
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="field">字段</param>
+        /// <param name="val">值</param>
+        /// <returns>Xml数据</returns>
+        private static XElement ToXml_Vector4(XmlWriteHelper helper, FieldInfo field, object val)
+        {
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
+                GenerateXAttribute(Const_XmlNameAtt_Value, ToXml_ToStringVector4(val)),
+                ToXml_TypeSimple(helper, field != null ? field.FieldType : val.GetType())
+                );
+        }
+
+        /// <summary>
+        /// 反序列化字段(Vector4)
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="xml">Xml数据</param>
+        /// <param name="val">字段所属对象</param>
+        /// <returns>Xml数据</returns>
+        private static void FromXml_Vector4(XmlReadHelper helper, XElement xml, ref object val)
+        {
+            XAttribute fieldAtt = GetXAttribute(xml, Const_XmlNameAtt_Field, true, true);
+            if (fieldAtt != null)
+            {
+                string fieldName = fieldAtt.Value;
+                FieldInfo field = val.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(val, FromXml_ParseVector4(valAtt.Value));
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                val = FromXml_ParseVector4(valAtt.Value);
+            }
+        }
+
+        /// <summary>
+        /// 获取基本类型Vector4
+        /// </summary>
+        /// <param name="type">字段所属对象</param>
+        /// <returns>基础类型</returns>
+        private static Type Type_GetBaseVector4(Type type)
+        {
+            return type == typeof(Vector4) ? type : null;
+        }
+
+        #endregion Vector4
+
+        #region Quaternion
+
+        /// <summary>
+        /// 转为字符串(Quaternion)
+        /// </summary>
+        /// <param name="val">值</param>
+        /// <returns>文本内容</returns>
+        private static string ToXml_ToStringQuaternion(object val)
+        {
+            Quaternion value = (Quaternion)val;
+            return value.x.ToString() + ", " + value.y.ToString() + ", " + value.z.ToString() + ", " + value.w.ToString();
+        }
+
+        /// <summary>
+        /// 解析字符串
+        /// </summary>
+        /// <param name="val">文本内容</param>
+        /// <returns>值</returns>
+        private static Quaternion FromXml_ParseQuaternion(string val)
+        {
+            string[] values = val.Split(Const_InspectorForValues, StringSplitOptions.RemoveEmptyEntries).Select(r => r.Trim()).ToArray();
+            if (values.Length != 4)
+            {
+                throw new Exception("值数量不匹配Quaternion");
+            }
+            return new Quaternion(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+        }
+
+        /// <summary>
+        /// 序列化字段(Quaternion)
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="field">字段</param>
+        /// <param name="val">值</param>
+        /// <returns>Xml数据</returns>
+        private static XElement ToXml_Quaternion(XmlWriteHelper helper, FieldInfo field, object val)
+        {
+            return GenerateXElement(field != null ? Const_XmlNameEle_NonSerializedField : Const_XmlNameEle_NonSerializeObject,
+                field != null ? GenerateXAttribute(Const_XmlNameAtt_Field, field.Name) : null,
+                GenerateXAttribute(Const_XmlNameAtt_Value, ToXml_ToStringQuaternion(val)),
+                ToXml_TypeSimple(helper, field != null ? field.FieldType : val.GetType())
+                );
+        }
+
+        /// <summary>
+        /// 反序列化字段(Quaternion)
+        /// </summary>
+        /// <param name="helper">助手</param>
+        /// <param name="xml">Xml数据</param>
+        /// <param name="val">字段所属对象</param>
+        /// <returns>Xml数据</returns>
+        private static void FromXml_Quaternion(XmlReadHelper helper, XElement xml, ref object val)
+        {
+            XAttribute fieldAtt = GetXAttribute(xml, Const_XmlNameAtt_Field, true, true);
+            if (fieldAtt != null)
+            {
+                string fieldName = fieldAtt.Value;
+                FieldInfo field = val.GetType().GetField(fieldName);
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                field.SetValue(val, FromXml_ParseQuaternion(valAtt.Value));
+            }
+            else
+            {
+                XAttribute valAtt = GetXAttribute(xml, Const_XmlNameAtt_Value);
+                val = FromXml_ParseQuaternion(valAtt.Value);
+            }
+        }
+
+        /// <summary>
+        /// 获取基本类型Quaternion
+        /// </summary>
+        /// <param name="type">字段所属对象</param>
+        /// <returns>基础类型</returns>
+        private static Type Type_GetBaseQuaternion(Type type)
+        {
+            return type == typeof(Quaternion) ? type : null;
+        }
+
+        #endregion Quaternion
 
         #region Asset
 
